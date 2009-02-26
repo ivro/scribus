@@ -119,6 +119,8 @@ public:
 	~ScribusDoc();
 	void init();
 	void setup(const int, const int, const int, const int, const int, const QString&, const QString&);
+
+// States
 	/*!
 	 * Set the loading state of the document
 	 * See ScribusDoc.isLoading()
@@ -140,6 +142,7 @@ public:
 	 * See ScribusDoc.setModified()
 	 */
 	bool isModified() const;
+
 // GUI
 	/*!
 	 * Associate document and GUI.
@@ -167,6 +170,18 @@ public:
 	 * @return the scribus view
 	 */
 	ScribusView* view() const;
+
+// Automatic Text Frames
+	/*!
+	 * Set if doc uses automatic text frames.
+	 * See ScribusDoc.usesAutomaticTextFrames(), ScribusDoc.PageSp and ScribusDoc.PageSpa
+	 */
+	void setUsesAutomaticTextFrames(const bool);
+	/*!
+	 * Is document using automatic text frames ?
+	 * See ScribusDoc.setUsesAutomaticTextFrames
+	 */
+	bool usesAutomaticTextFrames() const;
 
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
@@ -684,11 +699,6 @@ public:
 	 * @sa updateFrameItems();
 	 */
 	void rebuildItemLists();
-	/**
-	 * @brief Doc uses automatic text frames?
-	 */
-	bool usesAutomaticTextFrames() const;
-	void setUsesAutomaticTextFrames(const bool);
 	
 	/**
 	 * @brief Load images into an image frame, moved from the view
@@ -934,7 +944,6 @@ protected:
 	int ActiveLayer;
 	int docUnitIndex;
 	double docUnitRatio;
-	bool automaticTextFrames; // Flag for automatic Textframes
 	bool m_masterPageMode;
 	QMap<QString, double> m_constants;
 	ScGuardedObject<ScribusDoc> m_guardedObject;
@@ -1247,6 +1256,8 @@ protected:
 	bool m_hasGUI;		 		/*!< Is document associated with a GUI ? See hasGUI() and setGUI(). */
 	ScribusMainWindow* m_ScMW;		/*!< Main window associated with the document. See scMW() and setGUI(). */
 	ScribusView* m_View;			/*!< View associated with the document. See view() and setGUI(). */
+
+	bool automaticTextFrames;		/*!< Is the document using automaticTextFrames ? See usesAutomaticTextFrames() and setUsesAutomagicTextFrames(). */
 };
 
 Q_DECLARE_METATYPE(ScribusDoc*);
