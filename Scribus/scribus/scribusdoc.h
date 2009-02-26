@@ -912,8 +912,6 @@ protected:
 	bool m_hasGUI;
 	ApplicationPrefs& prefsData;
 	UndoManager * const undoManager;
-	bool loading;
-	bool modified;
 	int ActiveLayer;
 	int docUnitIndex;
 	double docUnitRatio;
@@ -1224,6 +1222,10 @@ public slots:
 	void updatePict(QString name);
 	void updatePictDir(QString name);
 	void removePict(QString name);
+
+protected:
+	bool loading;				/*!< Is the document loading ? See isLoading() and setLoading(). */
+	bool modified;				/*!< Is the document modified ? See isModified() and setModified(). */
 };
 
 Q_DECLARE_METATYPE(ScribusDoc*);
