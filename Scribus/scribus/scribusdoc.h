@@ -140,16 +140,37 @@ public:
 	 * See ScribusDoc.setModified()
 	 */
 	bool isModified() const;
+// GUI
+	/*!
+	 * Associate document and GUI.
+	 * See ScribusDoc.hasGUI(), ScribusDoc.scMW() and ScribusDoc.view()
+	 * @param hasgui Is document associated with gui ?
+	 * @param mainWindow scribus main window
+	 * @param view scribus view
+	 */
+	void setGUI(bool hasgui, ScribusMainWindow* mainWindow, ScribusView* view);
+	/*!
+	 * Is the document associated with GUI ?
+	 * See Scribus.setGUI()
+	 */
+	bool hasGUI() const {return m_hasGUI;}
+	/*!
+	  * Get the scribus main window associated with the document.
+	  * See Scribus.setGUI()
+	  * @return the scribus man window
+	  */
+//ivro: rename this function (mainWindow or scribusMainWindow) ?
+	ScribusMainWindow* scMW() const {return m_ScMW;}
+	/*!
+	 * Get the view associated with the document.
+	 * See Scribus.setGUI()
+	 * @return the scribus view
+	 */
+	ScribusView* view() const;
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
-
-	/**
-	 * @brief Return the view associated with the document
-	 */
-	ScribusView* view() const;
-	ScribusMainWindow* scMW() const {return m_ScMW;}
-	void setGUI(bool hasgui, ScribusMainWindow* mw, ScribusView* view);
 
 	/**
 	 * @brief Return the guarded object associated with the document
@@ -881,7 +902,6 @@ public:
 	/*! \brief Set new current page
 	\param newPage New current page */
 	void setCurrentPage(Page *newPage);
-	bool hasGUI() const {return m_hasGUI;}
 	/*! \brief Apply grid to a QPoint, from ScribusView */
 	QPoint ApplyGrid(const QPoint& in);
 	/*! \brief Apply grid to an FPoint, from ScribusView */
@@ -909,7 +929,6 @@ public:
 	
 protected:
 	void addSymbols();
-	bool m_hasGUI;
 	ApplicationPrefs& prefsData;
 	UndoManager * const undoManager;
 	int ActiveLayer;
@@ -918,8 +937,6 @@ protected:
 	bool automaticTextFrames; // Flag for automatic Textframes
 	bool m_masterPageMode;
 	QMap<QString, double> m_constants;
-	ScribusMainWindow* m_ScMW;
-	ScribusView* m_View;
 	ScGuardedObject<ScribusDoc> m_guardedObject;
 	
 public: // Public attributes
@@ -1226,6 +1243,10 @@ public slots:
 protected:
 	bool loading;				/*!< Is the document loading ? See isLoading() and setLoading(). */
 	bool modified;				/*!< Is the document modified ? See isModified() and setModified(). */
+
+	bool m_hasGUI;		 		/*!< Is document associated with a GUI ? See hasGUI() and setGUI(). */
+	ScribusMainWindow* m_ScMW;		/*!< Main window associated with the document. See scMW() and setGUI(). */
+	ScribusView* m_View;			/*!< View associated with the document. See view() and setGUI(). */
 };
 
 Q_DECLARE_METATYPE(ScribusDoc*);
