@@ -119,9 +119,26 @@ public:
 	~ScribusDoc();
 	void init();
 	void setup(const int, const int, const int, const int, const int, const QString&, const QString&);
+	/*!
+	 * Set the loading state of the document
+	 * See ScribusDoc.isLoading()
+	 */
 	void setLoading(const bool);
+	/*!
+	 * Is the document loading ?
+	 * See ScribusDoc.setLoading()
+	 */
 	bool isLoading() const;
+	/*!
+	 * Set modified state of the document
+	 * If state changed, update the document
+	 * See ScribusDoc.isModified()
+	 */
 	void setModified(const bool);
+	/*!
+	 * Is the document modified ?
+	 * See ScribusDoc.setModified()
+	 */
 	bool isModified() const;
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
