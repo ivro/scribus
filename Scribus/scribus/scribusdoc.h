@@ -231,7 +231,15 @@ public:
 	 */
 	void setName(const QString& name);
 
-// master page mode
+/*! @name Master Page
+ * Master page related functions.
+ *
+ * A master page is a model for page. Items on master pages will be repeated on each page with the master page.
+ * Use applyMasterPage() to associate a master page to a page and copyPageToMasterPage() to make a master page from a page.
+ *
+ * The master page mode allow to work with master pages and items with the same functions you use for pages and items.
+ * See masterPageMode() and setMasterPageMode().
+ */ //@{
 	/*!
 	 * Is the document in master page mode ?
 	 * In master page mode
@@ -247,6 +255,37 @@ public:
 	 */
 // Do we need to return if the move to master page mode was successful?
 	void setMasterPageMode(bool);
+
+	/*!
+	 * Add a master page.
+	 * Use this function to add a master page, do not use addPage
+	 * @param pageNumber index for the master page
+	 * @param pageName name of the master page
+	 * @return added page
+	 */
+	Page* addMasterPage(const int pageNumber, const QString& pageName);
+	/*!
+	 * Delete a master page.
+	 * @param pageNumber index of the master page
+	 */
+	void deleteMasterPage(const int pageNumber);
+	/*!
+	 * Replace a master page by default one.
+	 * @param oldMasterPage name of the master page to remplace
+	 */
+	void replaceMasterPage(const QString& oldMasterPage);
+	/*!
+	 * Rename a master page.
+	 * @param oldPageName old name of the master page
+	 * @param newPageName new name for the master page
+	 */
+	bool renameMasterPage(const QString& oldPageName, const QString& newPageName);
+	/*!
+	 * Rebuild master name list.
+	 * Rebuild ScribusDoc.MasterName list from the master page name
+	 */
+	void rebuildMasterNames(void);
+//@}
 
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
@@ -267,15 +306,6 @@ public:
 	
 	Page* addPage(const int pageNumber, const QString& masterPageName=QString::null, const bool addAutoFrame=false);
 	void deletePage(const int);
-	//! @brief Add a master page with this function, do not use addPage
-	Page* addMasterPage(const int, const QString&);
-	void deleteMasterPage(const int);
-	//! @brief Rebuild master name list
-	void rebuildMasterNames(void);
-	//! @brief Replace a master page by default one
-	void replaceMasterPage(const QString& oldMasterPage);
-	//! @brief Rename a master page
-	bool renameMasterPage(const QString& oldPageName, const QString& newPageName);
 	//! @brief Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
 	void createDefaultMasterPages();
 	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
@@ -992,17 +1022,8 @@ public: // Public attributes
 	FPoint maxCanvasCoordinate;
 	double rulerXoffset;
 	double rulerYoffset;
-	/** \brief List of Pages */
-	QList<Page*>* Pages;
-	/** \brief List of Master Pages */
-	QList<Page*> MasterPages;
 	/** \brief List of Document Pages */
 	QList<Page*> DocPages;
-	/** \brief Mapping Master Page Name to Master Page numbers */
-	QMap<QString,int> MasterNames;
-	/** \brief List of Objects */
-	QList<PageItem*>* Items;
-	QList<PageItem*> MasterItems;
 	QList<PageItem*> DocItems;
 	QList<PageItem*> FrameItems;
 	Selection* const m_Selection;
@@ -1270,6 +1291,13 @@ public slots:
 	void removePict(QString name);
 
 public:
+	QList<Page*>* Pages;			/*!< Pointer on a list of pages. See masterPageMode() */
+	QList<Page*> MasterPages;	 	/*!< List of Master Pages. */
+
+	QList<PageItem*>* Items;		/*!< Pointer on a list of items. See masterPageMode() */
+	QList<PageItem*> MasterItems;		/*!< List of items that belongs to Master Pages. */
+
+	QMap<QString,int> MasterNames;		/*!< Mapping Master Page Name to Master Page numbers. See rebuildMasterNames() */
 	bool GuideLock;				/*!< Is the guides must be locked ? See LockGuides() */
 
 	QString DocName;			/*!< Document's name. */
