@@ -285,11 +285,160 @@ public:
 	 * Rebuild ScribusDoc.MasterName list from the master page name
 	 */
 	void rebuildMasterNames(void);
-//@}
+//@} // End of master page group
 
-/** Setzt die Seitenattribute */
-	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
-	void resetPage(MarginStruct& newMargins, int fp);
+/*! @name Page
+ * Page related functions.
+ *
+ * A page represents a paper page. See Page::Page
+ */ //@{
+	// Add, delete and move page
+
+	/*!
+	 * Add a page.
+	 * Do not use this to add a master page, use addMasterPage instead
+	 * @param pageNumber index for the page
+	 * @param masterPageName master page to use
+	 * @param addAutoFrame add automatic text frame
+	 * @return addedpage
+	 */
+	Page* addPage(const int pageNumber, const QString& masterPageName=QString::null, const bool addAutoFrame=false);
+	/*!
+	 * Delete a page.
+	 * @param pageNumber index of the page
+	 */
+	void deletePage(const int pageNumber);
+	/*!
+	 * Move page(s) within the document.
+	 * @param from page index
+	 * @param to page index
+	 * @param ziel page index of the target to move to
+	 * @param art Before (0), After (1) or At the end (2)
+	 */
+//ivro: create typedef for param art (like whereToMove) ?
+	void movePage(const int from, const int to, const int ziel, const int art);
+	/*!
+	 * Copy a page.
+	 * Copy a page (pageNumberToCopy) copyCount times, whereToInsert(before or after) the existingPage or at the end.
+	 * @param pageNumberToCopy index of the page
+	 * @param existingPage where to copy (page index)
+	 * @param whereToInsert Before (0), After (1) or At the end (2)
+	 * @param copyCount number of copy
+	 */
+//ivro: use typedef whereToMove for param whereToInsert ?
+	void copyPage(int pageNumberToCopy, int existingPage, int whereToInsert, int copyCount);
+
+	// Properties of page
+
+	/*!
+	 * Set page properties.
+	 * @param width page width
+	 * @param height page height
+	 * @param marginsTop page margins top
+	 * @param marginsLeft page margins left
+	 * @param marginsRight page margins right
+	 * @param marginsBottom page margins bottom
+	 * @param numberOfColumns number of automaticTextFrames columns
+	 * @param distanceOfColumns distance between automaticTextFrams columns
+	 * @param automaticTextFrames is automaticTextFrames enabled ?
+	 * @param pageLayout index of the page layout in ScribusDoc.pageSets
+	 */
+	void setPage(double width, double height, double marginsTop, double marginsLeft, double marginsRight, double marginsBottom, double numberOfColums, double distanceOfColumns, bool automatictTextFrames, int pageLayout);
+	/*!
+	 * Reset the page properties.
+	 * @param newMargins margins to apply
+	 * @param pageLayout index of the page layout in Scribus.pageSets
+	 */
+	void resetPage(MarginStruct& newMargins, int pageLayout);
+	/*!
+	 * Apply a master page.
+	 * @param masterPageName name of the master page
+	 * @param pageNumber index of the page
+	 */
+	bool applyMasterPage(const QString& masterPageName, const int pageNumber);
+	/*!
+	 * Copies a normal page to be a master pages.
+	 * @param pageNumber index of the page to copy
+	 * @param leftPage
+         * @param maxLeftPage
+	 * @param masterPageName name for the master page
+	 * @param copyFromAppliedMaster
+	 */
+	bool copyPageToMasterPage(const int pageNumber, const int leftPage, const int maxLeftPage, const QString& masterPageName, bool copyFromAppliedMaster);
+
+	/*!
+	 * Add the automatic text frame to the page.
+	 * @param pageNumber index of page
+	 * @return number of text frame created, -1 on error
+	 */
+	int addAutomaticTextFrame(const int pageNumber);
+
+	/*!
+	 * Set the page margins. Current code uses current page only, also provide a (currently, TODO) option for this.
+	 * @param initialTop
+	 * @param initialBottom
+	 * @param initialLeft
+	 * @param initialRight
+	 * @param initialHeight
+	 * @param initialWight
+	 * @param height
+	 * @param width
+	 * @param orientation
+	 * @param pageSize
+	 * @param pageNumber if equal to -1, do nothing and return false. Caution default is -1.
+	 * @param pageType see Page.LeftPg, default to 0 (Right page)
+	 */
+//ivro: is this fuction name goods as it does things that not only about margins ?
+	bool changePageMargins(const double initialTop, const double initialBottom, const double initialLeft, const double initialRight, const double initialHeight, const double initialWidth, const double height, const double width, const int orientation, const QString& pageSize, const int pageNumber=-1, const int pageType = 0);
+
+	/*!
+	 * Get page's bleeds.
+	 * @param pageNumber index of the page
+	 * @param bleedData struct to get the bleed
+	 */
+//ivro: is this not better in Page ?
+	void getBleeds(int pageNumber, MarginStruct& bleedData);
+	/*!
+	 * Get page's bleeds.
+	 * @param page page to look at
+	 * @param bleedData struct to get the bleed
+	 */
+	void getBleeds(Page* page, MarginStruct& bleedData);
+
+
+	// Canvas
+
+	/*!
+	 * Get the location of the page on the canvas, ie, left, middle, or right.
+	 * Does not give information about middle left, etc.
+	 * @param pageIndex Index of page to find location for
+	 * @return LeftPage, MiddlePage, RightPage, enum from pagestructs.h
+	 */
+	PageLocation locationOfPage(int pageIndex) const;
+	/*!
+	 * Get the column of the page on the canvas, ie, left, middle, or right.
+	 * @param pageIndex Index of page to find location for
+	 * @return int of 0,1,2,3
+	 */
+	int columnOfPage(int pageIndex) const;
+	/*!
+	 * Return the x offset for a page on the canvas.
+	 * @retval double containing the offset. Returns -1.0 if page not in Pages list (as -ve is not possible).
+	 * Mostly saves bringing in extra includes into files that already have scribusdoc.h
+	 */
+	double getXOffsetForPage(const int);
+	/*!
+	 * Return the y offset for a page on the canvas.
+	 * @retval double coutaining the offset. Returns -1.0 if page not in pages list (as -ve is not possible).
+	 */
+	double getYOffsetForPage(const int);
+
+	/*!
+	 * Set the left and right margins based on the location of the page.
+	 * @param pageIndex index of the page
+	 */
+	void setLocationBasedPageLRMargins(uint pageIndex);
+//@} // End of Page group
 
 	/**
 	 * @brief Return the guarded object associated with the document
@@ -304,40 +453,10 @@ public:
 	
 	// Add, delete and move pages
 	
-	Page* addPage(const int pageNumber, const QString& masterPageName=QString::null, const bool addAutoFrame=false);
-	void deletePage(const int);
 	//! @brief Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
 	void createDefaultMasterPages();
 	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
 	void createNewDocPages(int pageCount);
-	/**
-	 * @brief Add the automatic text frame to the page
-	 * @param pageNumber page number
-	 * @return number of frame
-	 */
-	int addAutomaticTextFrame(const int pageNumber);
-	/**
-	 * Set the left and right margins based on the location of the page
-	 * @param pageIndex 
-	 */
-	void setLocationBasedPageLRMargins(uint pageIndex);
-	/**
-	 * @brief Move page(s) within the document
-	 * @param from page index
-	 * @param to page index
-	 * @param ziel target to move to (page index)
-	 * @param art Before, After or at the end
-	 */
-	void movePage(const int from, const int to, const int ziel, const int art);
-	
-	/**
-	 * @brief Copy a page (pageNumberToCopy) copyCount times, whereToInsert(before or after) the existingPage or at the end.
-	 * @param pageNumberToCopy 
-	 * @param existingPage 
-	 * @param whereToInsert 
-	 * @param copyCount 
-	 */
-	void copyPage(int pageNumberToCopy, int existingPage, int whereToInsert, int copyCount);
 	
 	// Add, delete and move layers
 	/**
@@ -668,10 +787,6 @@ public:
 	QStringList getUsedPatternsSelection(Selection* customSelection);
 	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
 	/**
-	 * @brief Apply a master page
-	 */
-	bool applyMasterPage(const QString& pageName, const int pageNumber);
-	/**
 	 * @brief Undo function for applying a master page
 	 */
 	void restoreMasterPageApplying(SimpleState *state, bool isUndo);
@@ -686,10 +801,6 @@ public:
 	 */
 	bool save(const QString& fileName, QString* savedFile = NULL);
 	/**
-	 * @brief Set the page margins. Current code uses current page only, also provide a (currently, TODO) option for this.
-	 */
-	bool changePageMargins(const double initialTop, const double initialBottom, const double initialLeft, const double initialRight, const double initialHeight, const double initialWidth, const double Height, const double width, const int orientation, const QString& pageSize, const int pageNumber=-1, const int pageType = 0);
-	/**
 	 * @brief Recalculate the colors after CMS settings change. Update the items in the doc accordingly.
 	 */
 	 void recalculateColors();
@@ -697,10 +808,6 @@ public:
 	 * @brief Sets up the ScText defaults from the document
 	 */
 	void setScTextDefaultsFromDoc(ScText *);
-	/**
-	 * @brief Copies a normal page to be a master pages
-	 */
-	bool copyPageToMasterPage(const int, const int, const int, const QString&, bool);
 	/**
 	 * @brief Paste an item to the document.
 	 * The bulk of a paste item process runs here for want of a better place, but its a better place
@@ -808,16 +915,6 @@ public:
 	void reformPages(bool moveObjects = true);
 	
 	/**
-	 * @brief Return the x or y offset for a page on the canvas
-	 * @retval double containing the offset. Returns -1.0 if page not in Pages list (as -ve is not possible).
-	 * Mostly saves bringing in extra includes into files that already have scribusdoc.h
-	 */
-	double getXOffsetForPage(const int);
-	double getYOffsetForPage(const int);
-	void getBleeds(int pageNumber, MarginStruct& bleedData);
-	void getBleeds(Page* page, MarginStruct& bleedData);
-	
-	/**
 	 * @brief Item type conversion functions
 	 */
 	PageItem* convertItemTo(PageItem *currItem, PageItem::ItemType newType, PageItem* secondaryItem=NULL);
@@ -890,19 +987,6 @@ public:
 	void insertColor(QString nam, double c, double m, double y, double k);
 	
 	QMap<QString, double>& constants() { return m_constants; }
-	/**
-	 * \brief Get the location of the page on the canvas, ie, left, middle, or right
-	 * Does not give information about middle left, etc.
-	 * @param pageIndex Index of page to find location for
-	 * @return LeftPage, MiddlePage, RightPage, enum from pagestructs.h
-	 */
-	PageLocation locationOfPage(int pageIndex) const;
-	/**
-	 * \brief Get the column of the page on the canvas, ie, left, middle, or right
-	 * @param pageIndex Index of page to find location for
-	 * @return int of 0,1,2,3
-	 */
-	int columnOfPage(int pageIndex) const;
 	
 	bool sendItemSelectionToBack();
 	bool bringItemSelectionToFront();
@@ -1023,8 +1107,6 @@ public: // Public attributes
 	double rulerXoffset;
 	double rulerYoffset;
 	/** \brief List of Document Pages */
-	QList<Page*> DocPages;
-	QList<PageItem*> DocItems;
 	QList<PageItem*> FrameItems;
 	Selection* const m_Selection;
 	/** \brief Pagewidth  */
@@ -1293,9 +1375,11 @@ public slots:
 public:
 	QList<Page*>* Pages;			/*!< Pointer on a list of pages. See masterPageMode() */
 	QList<Page*> MasterPages;	 	/*!< List of Master Pages. */
+	QList<Page*> DocPages;			/*!< List of Document Pages. */
 
 	QList<PageItem*>* Items;		/*!< Pointer on a list of items. See masterPageMode() */
 	QList<PageItem*> MasterItems;		/*!< List of items that belongs to Master Pages. */
+	QList<PageItem*> DocItems;		/*!< List of items that belongs to Document Pages. */
 
 	QMap<QString,int> MasterNames;		/*!< Mapping Master Page Name to Master Page numbers. See rebuildMasterNames() */
 	bool GuideLock;				/*!< Is the guides must be locked ? See LockGuides() */
