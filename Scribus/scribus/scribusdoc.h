@@ -231,6 +231,23 @@ public:
 	 */
 	void setName(const QString& name);
 
+// master page mode
+	/*!
+	 * Is the document in master page mode ?
+	 * In master page mode
+	 *      ScribusDoc.Pages = &ScribusDoc.MasterPages
+	 *      ScribusDoc.Items = &ScribusDoc.MasterItems
+	 * In normal mode (ie not in master mode)
+	 *      ScribusDoc.Pages = &ScribusDoc.DocPages
+	 *      ScribusDoc.Items = &ScribusDoc.DocItems
+	 */
+	bool masterPageMode() const { return m_masterPageMode; }
+	/*!
+	 * Set the doc into Master page mode.
+	 */
+// Do we need to return if the move to master page mode was successful?
+	void setMasterPageMode(bool);
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
@@ -784,15 +801,6 @@ public:
 	bool itemNameExists(const QString itemName);
 	
 	/**
-	 * @brief Set the doc into Master page mode
-	 * Do we need to return if the move to master page mode was successful?
-	 */
-	void setMasterPageMode(bool);
-
-	/*** Is the document in master page mode? */
-	bool masterPageMode() const { return m_masterPageMode; }
-	
-	/**
 	 * @brief Add a section to the document sections list
 	 * Set number to -1 to add in the default section if the map is empty
 	 */
@@ -960,7 +968,6 @@ protected:
 	ApplicationPrefs& prefsData;
 	UndoManager * const undoManager;
 	int ActiveLayer;
-	bool m_masterPageMode;
 	QMap<QString, double> m_constants;
 	ScGuardedObject<ScribusDoc> m_guardedObject;
 	
@@ -1278,6 +1285,8 @@ protected:
 
 	int docUnitIndex;			/*!< Document's unit index. See setUnitIndex() and unitIndex(). */
 	double docUnitRatio;			/*!< Document's unit ratio. See unitRatio(). */
+
+	bool m_masterPageMode;			/*!< Is the document in master page mode ? See masterPageMode() and setMasterPageMode(). */
 private:
 	Page* m_currentPage;			/*!< Current page. See setCurrentPage() and currentPage(). */
 };
