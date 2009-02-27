@@ -223,6 +223,14 @@ public:
 	 */
 	double unitRatio() const;
 
+// Document's properties
+	/*!
+	 * Sets the name of the document.
+	 * @param name Name for the document
+	 * @author Riku Leino
+	 */
+	void setName(const QString& name);
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
@@ -572,12 +580,6 @@ public:
 	 * @author Riku Leino
 	 */
 	void restore(UndoState* state, bool isUndo);
-	/**
-	 * @brief Sets the name of the document
-	 * @param name Name for the document
-	 * @author Riku Leino
-	 */
-	void setName(const QString& name);
 	/*!
 	 * @brief Returns a stringlist of the item attributes within the document
 	 */
@@ -1033,7 +1035,6 @@ public: // Public attributes
 	int SubMode;
 	double *ShapeValues;
 	int ValCount;
-	QString DocName;
 	QMap<QString,int> UsedFonts;
 	SCFonts * const AllFonts;
 	QList<AlignObjs> AObjects;
@@ -1263,6 +1264,8 @@ public slots:
 
 public:
 	bool GuideLock;				/*!< Is the guides must be locked ? See LockGuides() */
+
+	QString DocName;			/*!< Document's name. */
 protected:
 	bool loading;				/*!< Is the document loading ? See isLoading() and setLoading(). */
 	bool modified;				/*!< Is the document modified ? See isModified() and setModified(). */
