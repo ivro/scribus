@@ -206,6 +206,23 @@ public:
 	 */
 	int currentPageNumber();
 
+// Unit index and unit ratio
+	/*!
+	 * Set the document's unit index and update the document's unit ratio.
+	 * See ScribusDoc.unitIndex() and ScribusDoc.unitRatio()
+	 */
+	void setUnitIndex(const int);
+	/*!
+	 * Get the document's unit index.
+	 * See ScribusDoc.setUnitIndex()
+	 */
+	int unitIndex() const;
+	/*!
+	 * Get the document's unit ratio.
+	 * See ScribusDoc.setUnitIndex()
+	 */
+	double unitRatio() const;
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
@@ -602,12 +619,6 @@ public:
 	QStringList getUsedPatternsSelection(Selection* customSelection);
 	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
 	/**
-	 * @brief Set and get the document's unit index
-	 */
-	void setUnitIndex(const int);
-	int unitIndex() const;
-	double unitRatio() const;
-	/**
 	 * @brief Apply a master page
 	 */
 	bool applyMasterPage(const QString& pageName, const int pageNumber);
@@ -947,8 +958,6 @@ protected:
 	ApplicationPrefs& prefsData;
 	UndoManager * const undoManager;
 	int ActiveLayer;
-	int docUnitIndex;
-	double docUnitRatio;
 	bool m_masterPageMode;
 	QMap<QString, double> m_constants;
 	ScGuardedObject<ScribusDoc> m_guardedObject;
@@ -1263,6 +1272,9 @@ protected:
 	ScribusView* m_View;			/*!< View associated with the document. See view() and setGUI(). */
 
 	bool automaticTextFrames;		/*!< Is the document using automaticTextFrames ? See usesAutomaticTextFrames() and setUsesAutomagicTextFrames(). */
+
+	int docUnitIndex;			/*!< Document's unit index. See setUnitIndex() and unitIndex(). */
+	double docUnitRatio;			/*!< Document's unit ratio. See unitRatio(). */
 private:
 	Page* m_currentPage;			/*!< Current page. See setCurrentPage() and currentPage(). */
 };
