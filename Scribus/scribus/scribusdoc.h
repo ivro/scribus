@@ -440,245 +440,273 @@ public:
 	void setLocationBasedPageLRMargins(uint pageIndex);
 //@} // End of Page group
 
-	/**
-	 * @brief Return the guarded object associated with the document
-	 */
-	const ScGuardedPtr<ScribusDoc>& guardedPtr() const;
-	
-	UpdateManager* updateManager() { return &m_updateManager; }
-	MassObservable<PageItem*> * itemsChanged() { return &m_itemsChanged; }
-	MassObservable<Page*>     * pagesChanged() { return &m_pagesChanged; }
-	MassObservable<QRectF>    * regionsChanged() { return &m_regionsChanged; }
-	void invalidateRegion(QRectF region);
-	
-	// Add, delete and move pages
-	
-	//! @brief Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
-	void createDefaultMasterPages();
-	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
-	void createNewDocPages(int pageCount);
-	
+/*! @name Layer
+ * layer related functions.
+ */ //@{
 	// Add, delete and move layers
-	/**
-	 * @brief Add a layer to the current document
+
+	/*!
+	 * Add a layer to the current document.
 	 * @param layerName name of layer
 	 * @param activate the layer active
 	 * @return Number of the layer created
 	 */
 	int addLayer(const QString& layerName=QString::null, const bool activate=false);
-	/**
-	 * @brief Copies a layer from the current document
+	/*!
+	 * Copies a layer from the current document.
 	 * @param layerNumberToCopy source layer
 	 * @param whereToInsert target layer
 	 * @return Success or failure
 	 */
 	void copyLayer(int layerNumberToCopy, int whereToInsert);
-	/**
-	 * @brief Delete a layer from the current document
+	/*!
+	 * Delete a layer from the current document.
 	 * @param layerNumber of layer
 	 * @param deleteItems the items on the layer too?
 	 * @return Success or failure
 	 */
 	bool deleteLayer(const int layerNumber, const bool deleteItems);
-	/**
-	 * @brief Return the number of the current layer
-	 * @return Active layer number
+	/*!
+	 * FIXME: Make protected once scripter function no longer uses this directly
 	 */
-	int activeLayer();
+	void removeLayer(int l, bool dl = false);
 
-	/**
-	 * @brief Return the name of the current layer
-	 * @return Name of the layer
-	 */
-	const QString& activeLayerName();
-	/**
-	 * @brief Set the active layer via the layer number
+	// Active layer
+
+	/*!
+	 * Set the active layer via the layer number.
 	 * @param layerToActivate Number of the layer
 	 * @return Success or failure
 	 */
 	bool setActiveLayer(const int layerToActivate);
-	/**
-	 * @brief Set the active layer via the layer name
+	/*!
+	 * Set the active layer via the layer name.
 	 * @param layerNameToActivate Name of the layer
 	 * @return Success or failure
 	 */
 	bool setActiveLayer(const QString & layerNameToActivate);
-	/**
-	 * @brief Set the layer printable via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param isPrintable bool true = layer is prantable
-	 * @return Success or failure
+	/*!
+	 * Return the number of the current layer.
+	 * @return Active layer number
 	 */
-	bool setLayerPrintable(const int layerNumber, const bool isPrintable);
-	/**
-	 * @brief Is the layer printable
-	 * @param layerNumber Number of the layer
-	 * @return Printable or not
+	int activeLayer();
+	/*!
+	 * Return the name of the current layer.
+	 * @return Name of the layer
 	 */
-	bool layerPrintable(const int layerNumber);
-	/**
-	 * @brief Set the layer visible via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param isViewable true = layer is visible
-	 * @return Success or failure
-	 */
-	bool setLayerVisible(const int layerNumber, const bool isViewable);
-	/**
-	 * @brief Is the layer visible
-	 * @param layerNumber Number of the layer
-	 * @return Visible or not
-	 */
-	bool layerVisible(const int layerNumber);
-	/**
-	 * @brief Set the layer locked via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param isLocked true = layer is locked
-	 * @return Success or failure
-	 */
-	bool setLayerLocked(const int layerNumber, const bool isLocked);
-	/**
-	 * @brief Is the layer locked
-	 * @param layerNumber Number of the layer
-	 * @return Locked or not
-	 */
-	bool layerLocked(const int layerNumber);
-	/**
-	 * @brief Set the layer flow via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param flow true = Text flows around objects on this layer
-	 * @return Success or failure
-	 */
-	bool setLayerFlow(const int layerNumber, const bool flow);
-	/**
-	 * @brief does text flow around objects on this layer
-	 * @param layerNumber Number of the layer
-	 * @return flow or not
-	 */
-	bool layerFlow(const int layerNumber);
-	/**
-	 * @brief Set the layer transparency via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param trans transparency value 0.0 - 1.0
-	 * @return Success or failure
-	 */
-	bool setLayerTransparency(const int layerNumber, double trans);
-	/**
-	 * @brief returns the layer transparency
-	 * @param layerNumber Number of the layer
-	 * @return transparency value 0.0 - 1.0
-	 */
-	double layerTransparency(const int layerNumber);
-	/**
-	 * @brief Set the layer layerBlendMode via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param blend layerBlendMode
-	 * @return Success or failure
-	 */
-	bool setLayerBlendMode(const int layerNumber, int blend);
-	/**
-	 * @brief returns the layer BlendMode
-	 * @param layerNumber Number of the layer
-	 * @return layerBlendMode
-	 */
-	int layerBlendMode(const int layerNumber);
-	/**
-	 * @brief Return the level of the requested layer
-	 * @param layerNumber Number of the layer
-	 * @return Level of the layer
-	 */
-	int layerLevelFromNumber(const int layerNumber);
-	/**
-	 * @brief Set the layer marker color
-	 * @param layerNumber Number of the layer
-	 * @param color color of the marker
-	 * @return Success or failure
-	 */
-	bool setLayerMarker(const int layerNumber, QColor color);
-	/**
-	 * @brief returns the layer marker color
-	 * @param layerNumber Number of the layer
-	 * @return marker color
-	 */
-	QColor layerMarker(const int layerNumber);
-	/**
-	 * @brief Set the layer outline mode via the layer number
-	 * @param layerNumber Number of the layer
-	 * @param outline true = layer is displayed in outlines only
-	 * @return Success or failure
-	 */
-	bool setLayerOutline(const int layerNumber, const bool outline);
-	/**
-	 * @brief is this layer in outline mode
-	 * @param layerNumber Number of the layer
-	 * @return outline or not
-	 */
-	bool layerOutline(const int layerNumber);
-	/**
-	 * @brief Return the number of the layer at a certain level
-	 * @param layerLevel Layer level
-	 * @return Layer number
-	 */
-	int layerNumberFromLevel(const int layerLevel);
-	/**
-	 * @brief Return the layer count
-	 * @return Number of layers in doc
-	 */
-	int layerCount() const;
-	/**
-	 * @brief Lower a layer
-	 * @param layerNumber Number of the layer
-	 * @return Success or failure
-	 */
-	bool lowerLayer(const int layerNumber);
-	/**
-	 * @brief Lower a layer using the level
-	 * @param layerLevel Level of the layer
-	 * @return Success or failure
-	 */
-	bool lowerLayerByLevel(const int layerLevel);
-	/**
-	 * @brief Raise a layer
-	 * @param layerNumber Number of the layer
-	 * @return Success or failure
-	 */
-	bool raiseLayer(const int layerNumber);
-	/**
-	 * @brief Raise a layer using the level
-	 * @param layerLevel Level of the layer
-	 * @return Success or failure
-	 */
-	bool raiseLayerByLevel(const int layerLevel);
-	/**
-	 * @brief Return the layer name
+	const QString& activeLayerName();
+
+	// Layer properties
+
+	/*!
+	 * Return the layer name.
 	 * @param layerNumber Number of the layer
 	 * @return Name of the layer
 	 */
 	QString layerName(const int layerNumber) const;
-	/**
-	 * @brief Change the name of a layer
+	/*!
+	 * Change the name of a layer.
 	 * @param layerNumber number of the layer
 	 * @param newName new name of the layer
 	 * @return Success or failure
 	 */
 	bool changeLayerName(const int layerNumber, const QString& newName);
-	/**
-	 * @brief Does the layer have items on it?
+	/*!
+	 * Set the layer printable via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param isPrintable bool true = layer is prantable
+	 * @return Success or failure
+	 */
+	bool setLayerPrintable(const int layerNumber, const bool isPrintable);
+	/*!
+	 * Is the layer printable ?
+	 * @param layerNumber Number of the layer
+	 * @return Printable or not
+	 */
+	bool layerPrintable(const int layerNumber);
+	/*!
+	 * Set the layer visible via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param isViewable true = layer is visible
+	 * @return Success or failure
+	 */
+	bool setLayerVisible(const int layerNumber, const bool isViewable);
+	/*!
+	 * Is the layer visible ?
+	 * @param layerNumber Number of the layer
+	 * @return Visible or not
+	 */
+	bool layerVisible(const int layerNumber);
+	/*!
+	 * Set the layer locked via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param isLocked true = layer is locked
+	 * @return Success or failure
+	 */
+	bool setLayerLocked(const int layerNumber, const bool isLocked);
+	/*!
+	 * Is the layer locked ?
+	 * @param layerNumber Number of the layer
+	 * @return Locked or not
+	 */
+	bool layerLocked(const int layerNumber);
+	/*!
+	 * Set the layer flow via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param flow true = Text flows around objects on this layer
+	 * @return Success or failure
+	 */
+	bool setLayerFlow(const int layerNumber, const bool flow);
+	/*!
+	 * does text flow around objects on this layer ?
+	 * @param layerNumber Number of the layer
+	 * @return flow or not
+	 */
+	bool layerFlow(const int layerNumber);
+	/*!
+	 * Set the layer transparency via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param trans transparency value 0.0 - 1.0
+	 * @return Success or failure
+	 */
+	bool setLayerTransparency(const int layerNumber, double trans);
+	/*!
+	 * returns the layer transparency.
+	 * @param layerNumber Number of the layer
+	 * @return transparency value 0.0 - 1.0
+	 */
+	double layerTransparency(const int layerNumber);
+	/*!
+	 * Set the layer layerBlendMode via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param blend layerBlendMode
+	 * @return Success or failure
+	 */
+	bool setLayerBlendMode(const int layerNumber, int blend);
+	/*!
+	 * Returns the layer BlendMode.
+	 * @param layerNumber Number of the layer
+	 * @return layerBlendMode
+	 */
+	int layerBlendMode(const int layerNumber);
+	/*!
+	 * Set the layer outline mode via the layer number.
+	 * @param layerNumber Number of the layer
+	 * @param outline true = layer is displayed in outlines only
+	 * @return Success or failure
+	 */
+	bool setLayerOutline(const int layerNumber, const bool outline);
+	/*!
+	 * Is this layer in outline mode ?
+	 * @param layerNumber Number of the layer
+	 * @return outline or not
+	 */
+	bool layerOutline(const int layerNumber);
+
+	// Layer marker color
+
+	/*!
+	 * Set the layer marker color.
+	 * @param layerNumber Number of the layer
+	 * @param color color of the marker
+	 * @return Success or failure
+	 */
+	bool setLayerMarker(const int layerNumber, QColor color);
+	/*!
+	 * Returns the layer marker color.
+	 * @param layerNumber Number of the layer
+	 * @return marker color
+	 */
+	QColor layerMarker(const int layerNumber);
+
+	// Layer level
+
+	/*!
+	 * Returns the level of the requested layer.
+	 * @param layerNumber Number of the layer
+	 * @return Level of the layer
+	 */
+	int layerLevelFromNumber(const int layerNumber);
+	/*!
+	 * Returns the number of the layer at a certain level.
+	 * @param layerLevel Layer level
+	 * @return Layer number
+	 */
+	int layerNumberFromLevel(const int layerLevel);
+
+	// Lower and Raise Layer
+
+	/*!
+	 * Lowers a layer.
+	 * @param layerNumber Number of the layer
+	 * @return Success or failure
+	 */
+	bool lowerLayer(const int layerNumber);
+	/*!
+	 * Lowers a layer using the level.
+	 * @param layerLevel Level of the layer
+	 * @return Success or failure
+	 */
+	bool lowerLayerByLevel(const int layerLevel);
+	/*!
+	 * Raises a layer.
+	 * @param layerNumber Number of the layer
+	 * @return Success or failure
+	 */
+	bool raiseLayer(const int layerNumber);
+	/*!
+	 * Raises a layer using the level.
+	 * @param layerLevel Level of the layer
+	 * @return Success or failure
+	 */
+	bool raiseLayerByLevel(const int layerLevel);
+
+	// Various functions on layer
+
+	/*!
+	 * Returns the layer count.
+	 * @return Number of layers in doc
+	 */
+	int layerCount() const;
+	/*!
+	 * Does the layer have items on it ?
 	 * @param layerNumber Number of the layer
 	 * @return Layer contains items bool
 	 */
 	bool layerContainsItems(const int layerNumber);
-	/**
-	 * @brief Renumber a layer. Used in particular for reinsertion for undo/redo
+	/*!
+	 * Renumbers a layer. Used in particular for reinsertion for undo/redo.
 	 * @param layerNumber old layer number
 	 * @param newLayerNumber New layer number
 	 * @return Success or failure
 	 */
 	bool renumberLayer(const int layerNumber, const int newLayerNumber);
-	/**
-	 * @brief Return a list of the layers in their order
+	/*!
+	 * Returns a list of the layers in their order.
 	 * @param list QStringList to insert the layer names into
 	 */
 	void orderedLayerList(QStringList* list);
+//@} // End of Layer function
+
+
+	/**
+	 * @brief Return the guarded object associated with the document
+	 */
+	const ScGuardedPtr<ScribusDoc>& guardedPtr() const;
+
+	UpdateManager* updateManager() { return &m_updateManager; }
+	MassObservable<PageItem*> * itemsChanged() { return &m_itemsChanged; }
+	MassObservable<Page*>     * pagesChanged() { return &m_pagesChanged; }
+	MassObservable<QRectF>    * regionsChanged() { return &m_regionsChanged; }
+	void invalidateRegion(QRectF region);
+
+	// Add, delete and move pages
+
+	//! @brief Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
+	void createDefaultMasterPages();
+	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
+	void createNewDocPages(int pageCount);
+
 	//Items
 	bool deleteTaggedItems();
 
@@ -1046,7 +1074,6 @@ public:
 	void adjustCanvas(FPoint minPos, FPoint maxPos, bool absolute = false);
 	void recalcPicturesRes(bool applyNewRes = false);
 	void connectDocSignals();
-	void removeLayer(int l, bool dl = false); //FIXME: Make protected once scripter function no longer uses this directly
 	/*! \brief We call changed() whenever the document needs to know it has been changed.
 	 *  If the document is the primary document in a main window, it will signal to enable/disable
 	 * certain operations.
