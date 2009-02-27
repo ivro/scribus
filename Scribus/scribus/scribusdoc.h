@@ -192,6 +192,20 @@ public:
 	 */
 	void lockGuides(bool isLocked);
 
+// Current Page
+	/*!
+	 * Set new current page.
+	 */
+	void setCurrentPage(Page*);
+	/*!
+	 * Get the current page.
+	 */
+	Page* currentPage();
+	/*!
+	 * Get the current page number.
+	 */
+	int currentPageNumber();
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
@@ -749,11 +763,6 @@ public:
 	PageItem* convertItemTo(PageItem *currItem, PageItem::ItemType newType, PageItem* secondaryItem=NULL);
 	
 	/**
-	 * @brief The page number of the current page
-	 */
-	int currentPageNumber();
-	
-	/**
 	 * @brief Return true iff the passed name is not used by any existing PageItem
 	 *        in the same document as this PageItem.
 	 * @author Craig Ringer
@@ -908,12 +917,6 @@ public:
 	 * certain operations.
 	 */
 	void changed();
-	/*! \brief Get pointer to the current page
-	\retval Page* current page object */
-	Page* currentPage();
-	/*! \brief Set new current page
-	\param newPage New current page */
-	void setCurrentPage(Page *newPage);
 	/*! \brief Apply grid to a QPoint, from ScribusView */
 	QPoint ApplyGrid(const QPoint& in);
 	/*! \brief Apply grid to an FPoint, from ScribusView */
@@ -1137,7 +1140,6 @@ private:
 	UndoTransaction* m_itemCreationTransaction;
 	UndoTransaction* m_alignTransaction;
 
-	Page* m_currentPage;
 	UpdateManager m_updateManager;
 	MassObservable<PageItem*> m_itemsChanged;
 	MassObservable<Page*> m_pagesChanged;
@@ -1261,6 +1263,8 @@ protected:
 	ScribusView* m_View;			/*!< View associated with the document. See view() and setGUI(). */
 
 	bool automaticTextFrames;		/*!< Is the document using automaticTextFrames ? See usesAutomaticTextFrames() and setUsesAutomagicTextFrames(). */
+private:
+	Page* m_currentPage;			/*!< Current page. See setCurrentPage() and currentPage(). */
 };
 
 Q_DECLARE_METATYPE(ScribusDoc*);
