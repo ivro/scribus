@@ -183,6 +183,15 @@ public:
 	 */
 	bool usesAutomaticTextFrames() const;
 
+// Grid and Guides
+	/*!
+	 * Should guides be locked or not ?
+	 * @param isLocked If true guides on pages cannot be moved if false they
+	 * can be dragged to new positions.
+	 * @author Riku Leino
+	 */
+	void lockGuides(bool isLocked);
+
 /** Setzt die Seitenattribute */
 	void setPage(double b, double h, double t, double l, double r, double bo, double sp, double ab, bool atf, int fp);
 	void resetPage(MarginStruct& newMargins, int fp);
@@ -525,13 +534,6 @@ public:
 	 */
 	void replaceCharStyles(const QMap<QString,QString>& newNameForOld);
 
-	/**
-	 * @brief Should guides be locked or not
-	 * @param isLocked If true guides on pages cannot be moved if false they
-	 * can be dragged to new positions.
-	 * @author Riku Leino
-	 */
-	void lockGuides(bool isLocked);
 	/**
 	 * @brief Method used when an undo/redo is requested.
 	 * @param state State describing the action that is wanted to be undone/redone
@@ -956,7 +958,6 @@ public: // Public attributes
 	int viewCount;
 	int viewID;
 	bool SnapGuides;
-	bool GuideLock;
 	/** \brief Scratch space around Pages */
 	MarginStruct scratch;
 	double GapHorizontal;
@@ -1249,6 +1250,8 @@ public slots:
 	void updatePictDir(QString name);
 	void removePict(QString name);
 
+public:
+	bool GuideLock;				/*!< Is the guides must be locked ? See LockGuides() */
 protected:
 	bool loading;				/*!< Is the document loading ? See isLoading() and setLoading(). */
 	bool modified;				/*!< Is the document modified ? See isModified() and setModified(). */
