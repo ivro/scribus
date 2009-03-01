@@ -1083,6 +1083,22 @@ public:
 	void checkItemForFonts(PageItem *it, QMap<QString, QMap<uint, FPointArray> > & Really, uint lc);
 //@} // End of font functions
 
+/*! @name Patterns
+ * Pattern related functions
+ */ //@{
+	/*!
+	* Set the patterns for a document.
+	*/
+	bool addPattern(QString &name, ScPattern& pattern);
+	void setPatterns(QMap<QString, ScPattern> &patterns);
+	/*!
+	* Builds a QStringList of the patterns used within the document.
+	*/
+	QStringList getUsedPatterns();
+	QStringList getUsedPatternsSelection(Selection* customSelection);
+	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
+//@} // End of patterns functions
+
 	/**
 	 * @brief Return the guarded object associated with the document
 	 */
@@ -1113,17 +1129,6 @@ public:
 	 */
 	void restore(UndoState* state, bool isUndo);
 
-	/*!
-	* @brief Set the patterns for a document
-	*/
-	bool addPattern(QString &name, ScPattern& pattern);
-	void setPatterns(QMap<QString, ScPattern> &patterns);
-	/*!
-	* @brief Builds a QStringList of the patterns used within the document
-	*/
-	QStringList getUsedPatterns();
-	QStringList getUsedPatternsSelection(Selection* customSelection);
-	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
 	/**
 	 * @brief Undo function for applying a master page
 	 */
