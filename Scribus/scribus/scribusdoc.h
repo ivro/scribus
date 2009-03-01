@@ -940,6 +940,87 @@ public:
 	void endAlign();
 //@} // End of align functions
 
+/*! @name Styles
+ * Style related functions
+ */ //@{
+	// Paragraphe style
+
+	/*!
+	 * Get a paragraph style by its name.
+	 */
+	const ParagraphStyle& paragraphStyle(QString name) { return docParagraphStyles.get(name); }
+	/*!
+	 * Get all the paragraph style.
+	 */
+	const StyleSet<ParagraphStyle>& paragraphStyles()   { return docParagraphStyles; }
+	/*!
+	 * Redefine Paragraphes style.
+	 */
+//ivro: rename rededineParaStyles ?
+	void redefineStyles(const StyleSet<ParagraphStyle>& newStyles, bool removeUnused=false);
+	/*!
+	 * Remove any reference to old styles and replace with new name.
+	 * This needs to be called when a style was removed. New name may be "".
+	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
+	 */
+//ivro: rename replaceParaStyles ?
+	void replaceStyles(const QMap<QString,QString>& newNameForOld);
+	/*!
+	 * Is the default paragraph style ?
+	 * @param p paragraph style to test
+	 */
+//ivro: is this must be with the one for char style ?
+	bool isDefaultStyle( const ParagraphStyle& p ) const { return docParagraphStyles.isDefault(p); }
+
+	// Character style
+
+	/*!
+	 * Get a character style by name.
+	 * @param name char style name
+	 */
+	const CharStyle& charStyle(QString name) { return docCharStyles.get(name); }
+	/*!
+	 * Get all the Character styles.
+	 */
+	const StyleSet<CharStyle>& charStyles()  { return docCharStyles; }
+	/*!
+	 * Redefine Character styles.
+	 * @param newStyle character styles
+	 * @param removeUnused
+	 */
+	void redefineCharStyles(const StyleSet<CharStyle>& newStyles, bool removeUnused=false);
+	/*!
+	 * Remove any reference to old styles and replace with new name.
+	 * This needs to be called when a style was removed. New name may be "".
+	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
+	 */
+	void replaceCharStyles(const QMap<QString,QString>& newNameForOld);
+	/*!
+	 * Is the default character style ?
+	 * @param c character style to test
+	 */
+	bool isDefaultStyle( const CharStyle& c ) const { return docCharStyles.isDefault(c); }
+// 	bool isDefaultStyle( LineStyle& l ) const { return MLineStyles......; }
+
+	// Load Style
+
+	/*!
+	 * Insert styles from another document in this document.
+	 * @param fileName The path of the document we want to extract its styles
+	 */
+	void loadStylesFromFile(QString fileName);
+	/*!
+	 * Gather styles from another document.
+	 * @param fileName The path of the document we want to extract its styles
+	 * @param tempStyles A pointer to a StyleSet which will be filled by paragraph styles
+	 * @param tempCharStyles A pointer to a StyleSet which will be filled by character styles
+	 * @param tempLineStyles A map which will be filled by line styles
+	 */
+	void loadStylesFromFile(QString fileName, StyleSet<ParagraphStyle> *tempStyles,
+	                                          StyleSet<CharStyle> *tempCharStyles,
+	                                          QMap<QString, multiLine> *tempLineStyles);
+//@} // End of style group
+
 /*! @name Color Management
  * Color Management related functions.
  */ //@{
@@ -1001,49 +1082,9 @@ public:
 	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
 	void createNewDocPages(int pageCount);
 
-	const ParagraphStyle& paragraphStyle(QString name) { return docParagraphStyles.get(name); }
-	const StyleSet<ParagraphStyle>& paragraphStyles()   { return docParagraphStyles; }
-	bool isDefaultStyle( const ParagraphStyle& p ) const { return docParagraphStyles.isDefault(p); }
-	bool isDefaultStyle( const CharStyle& c ) const { return docCharStyles.isDefault(c); }
-// 	bool isDefaultStyle( LineStyle& l ) const { return MLineStyles......; }
 
 	void getNamedResources(ResourceCollection& lists) const;
-	void replaceNamedResources(ResourceCollection& newNames);	
-	
-	void redefineStyles(const StyleSet<ParagraphStyle>& newStyles, bool removeUnused=false);
-	/**
-	 * @brief Remove any reference to old styles and replace with new name. This needs to be
-	 *        called when a style was removed. New name may be "".
-	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
-	 */
-	void replaceStyles(const QMap<QString,QString>& newNameForOld);
-	/**
-	 * @brief Insert styles from another document in this document.
-	 *        
-	 * @param fileName The path of the document we want to extract its styles
-	 */
-	void loadStylesFromFile(QString fileName);
-	/**
-	 * @brief Gather styles from another document.
-	 *        
-	 * @param fileName The path of the document we want to extract its styles
-	 * @param tempStyles A pointer to a StyleSet which will be filled by paragraph styles
-	 * @param tempCharStyles A pointer to a StyleSet which will be filled by character styles
-	 * @param tempLineStyles A map which will be filled by line styles
-	 */
-	void loadStylesFromFile(QString fileName, StyleSet<ParagraphStyle> *tempStyles,
-	                                          StyleSet<CharStyle> *tempCharStyles,
-	                                          QMap<QString, multiLine> *tempLineStyles);
-
-	const CharStyle& charStyle(QString name) { return docCharStyles.get(name); }
-	const StyleSet<CharStyle>& charStyles()  { return docCharStyles; }
-	void redefineCharStyles(const StyleSet<CharStyle>& newStyles, bool removeUnused=false);
-	/**
-	 * @brief Remove any reference to old styles and replace with new name. This needs to be
-	 *        called when a style was removed. New name may be "".
-	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
-	 */
-	void replaceCharStyles(const QMap<QString,QString>& newNameForOld);
+	void replaceNamedResources(ResourceCollection& newNames);
 
 	/**
 	 * @brief Method used when an undo/redo is requested.
