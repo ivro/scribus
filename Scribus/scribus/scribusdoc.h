@@ -940,6 +940,49 @@ public:
 	void endAlign();
 //@} // End of align functions
 
+/*! @name Color Management
+ * Color Management related functions.
+ */ //@{
+	/*!
+	 * Builds a qmap of the icc profiles used within the document.
+	 */
+	void getUsedProfiles(ProfilesL& usedProfiles);
+	bool OpenCMSProfiles(ProfilesL InPo, ProfilesL InPoCMYK, ProfilesL MoPo, ProfilesL PrPo);
+	void CloseCMSProfiles();
+	void SetDefaultCMSParams();
+	/*!
+	 * Switch Colormanagement on or of.
+	 * @param enable bool, if true Colormanagement is switched on, else off
+	 */
+	void enableCMS(bool enable);
+	/*!
+	 * Recalculate the colors after CMS settings change. Update the items in the doc accordingly.
+	 */
+	void recalculateColors();
+
+	/*!
+	 * Insert a color into the documents color list.
+	 * @param colorList Name of the color list
+	 * @param cyan Cyan component
+	 * @param magenta Magenta component
+	 * @param yellow Yellow component
+	 * @param black Black component
+	 */
+	void insertColor(QString colorList, double cryan, double magenta, double yellow, double black);
+	/*!
+	 * Replace line style colors.
+	 */
+	void replaceLineStyleColors(const QMap<QString, QString>& colorMap);
+	/*!
+	* Builds a qmap of the colours used within the document.
+	*/
+	void getUsedColors(ColorList &colorsToUse, bool spot = false);
+	/*!
+	* Is this specific color is used by line styles.
+	*/
+	bool lineStylesUseColor(const QString& colorName);
+//@} // End of color functions
+
 	/**
 	 * @brief Return the guarded object associated with the document
 	 */
@@ -958,20 +1001,6 @@ public:
 	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
 	void createNewDocPages(int pageCount);
 
-
-	/*!
-		* @brief Builds a qmap of the icc profiles used within the document
-	 */
-	void getUsedProfiles(ProfilesL& usedProfiles);
-	bool OpenCMSProfiles(ProfilesL InPo, ProfilesL InPoCMYK, ProfilesL MoPo, ProfilesL PrPo);
-	void CloseCMSProfiles();
-	void SetDefaultCMSParams();
-	/**
-	 * @brief Switch Colormanagement on or of
-	 * @param enable bool, if true Colormanagement is switched on, else off
-	 */
-	void enableCMS(bool enable);
-	
 	const ParagraphStyle& paragraphStyle(QString name) { return docParagraphStyles.get(name); }
 	const StyleSet<ParagraphStyle>& paragraphStyles()   { return docParagraphStyles; }
 	bool isDefaultStyle( const ParagraphStyle& p ) const { return docParagraphStyles.isDefault(p); }
@@ -1037,18 +1066,6 @@ public:
 	void checkItemForFonts(PageItem *it, QMap<QString, QMap<uint, FPointArray> > & Really, uint lc);
 
 	/*!
-	 * @brief Replace line style colors
-	 */
-	void replaceLineStyleColors(const QMap<QString, QString>& colorMap);
-	/*!
-	* @brief Builds a qmap of the colours used within the document
-	*/
-	void getUsedColors(ColorList &colorsToUse, bool spot = false);
-	/*!
-	* @brief Return if a specific color is used by line styles
-	*/
-	bool lineStylesUseColor(const QString& colorName);
-	/*!
 	* @brief Set the patterns for a document
 	*/
 	bool addPattern(QString &name, ScPattern& pattern);
@@ -1073,10 +1090,6 @@ public:
 	 * @brief Save function
 	 */
 	bool save(const QString& fileName, QString* savedFile = NULL);
-	/**
-	 * @brief Recalculate the colors after CMS settings change. Update the items in the doc accordingly.
-	 */
-	 void recalculateColors();
 	/**
 	 * @brief Sets up the ScText defaults from the document
 	 */
@@ -1119,15 +1132,6 @@ public:
 	void updateAllItemQColors();
 	//! @brief Some internal align tools
 	typedef enum {alignFirst, alignLast, alignPage, alignMargins, alignGuide, alignSelection } AlignTo;
-	/**
-	 * \brief Insert a color into the documents color list
-	 * @param nam Name of the colour
-	 * @param c Cyan component
-	 * @param m Magenta component
-	 * @param y Yellow component
-	 * @param k Black component
-	 */
-	void insertColor(QString nam, double c, double m, double y, double k);
 	
 	QMap<QString, double>& constants() { return m_constants; }
 	
