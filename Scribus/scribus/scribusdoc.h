@@ -884,6 +884,55 @@ public:
 	/*! Get a list of frames of certain type. */
 	QMap<PageItem*, QString> getDocItemNames(PageItem::ItemType itemType);
 //@} //End Items group
+
+/*! @name Sections
+ * Sections related functions
+ */ //@{
+	// add, delete, use sections
+
+	/*!
+	 * Add a section to the document sections list.
+	 * Set number to -1 to add in the default section if the map is empty
+	 */
+	void addSection(const int number=0, const QString& name=QString::null, const uint fromindex=0, const uint toindex=0, const  DocumentSectionType type=Type_1_2_3, const uint sectionstartindex=0, const bool reversed=false, const bool active=true);
+	/*!
+	 * Delete a section from the document sections list.
+	 */
+	bool deleteSection(const uint);
+	/*!
+	 * Gets the page number to be printed based on the section it is in.
+	 * Returns QString::null on failure to find the pageIndex
+	 */
+	const QString getSectionPageNumberForPageIndex(const uint) const;
+	/*!
+	 * Gets the key of the sections map based on the section the page index is in.
+	 * Returns -1 on failure to find the pageIndex
+	 */
+	int getSectionKeyForPageIndex(const uint pageIndex) const;
+	/*!
+	 *
+	 *
+	 */
+	void updateSectionPageNumbersToPages();
+	/*!
+	 *
+	 * @param otherPageIndex
+	 * @param location
+	 * @param count
+	 */
+	void addPageToSection(const uint otherPageIndex, const uint location, const uint count=1);
+	/*!
+	 *
+	 * @param pageIndex
+	 */
+	void removePageFromSection(const uint pageIndex);
+	/*!
+	 *
+	 */
+	void setFirstSectionFromFirstPageNumber();
+//@} // End of Sections group
+
+
 	/**
 	 * @brief Return the guarded object associated with the document
 	 */
@@ -1057,46 +1106,6 @@ public:
 	//void reformPages(double& maxX, double& maxY, bool moveObjects = true);
 	void reformPages(bool moveObjects = true);
 	
-	/**
-	 * @brief Add a section to the document sections list
-	 * Set number to -1 to add in the default section if the map is empty
-	 */
-	void addSection(const int number=0, const QString& name=QString::null, const uint fromindex=0, const uint toindex=0, const  DocumentSectionType type=Type_1_2_3, const uint sectionstartindex=0, const bool reversed=false, const bool active=true);
-	/**
-	 * @brief Delete a section from the document sections list
-	 */
-	bool deleteSection(const uint);
-	/**
-	 * @brief Gets the page number to be printed based on the section it is in.
-	 * Returns QString::null on failure to find the pageIndex
-	 */
-	const QString getSectionPageNumberForPageIndex(const uint) const;
-	/**
-	 * @brief Gets the key of the sections map based on the section the page index is in.
-	 * Returns -1 on failure to find the pageIndex
-	 */
-	int getSectionKeyForPageIndex(const uint pageIndex) const;
-	/**
-	 *
-	 *
-	 */
-	void updateSectionPageNumbersToPages();
-	/**
-	 * 
-	 * @param otherPageIndex 
-	 * @param location 
-	 * @param count 
-	 */
-	void addPageToSection(const uint otherPageIndex, const uint location, const uint count=1);
-	/**
-	 * 
-	 * @param pageIndex 
-	 */
-	void removePageFromSection(const uint pageIndex);
-	/**
-	 * 
-	 */
-	void setFirstSectionFromFirstPageNumber();
 	/**
 	 * @brief Update the fill and line QColors for all items in the doc
 	 */
@@ -1364,7 +1373,7 @@ public:
 	//Attributes to be applied to frames
 	ObjAttrVector docItemAttributes;
 	ToCSetupVector docToCSetups;
-	DocumentSectionMap sections;
+	DocumentSectionMap sections;		/*< Map of document's sections */
 	FPointArray symReturn;
 	FPointArray symNewLine;
 	FPointArray symTab;
