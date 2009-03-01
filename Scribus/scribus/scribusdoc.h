@@ -932,6 +932,13 @@ public:
 	void setFirstSectionFromFirstPageNumber();
 //@} // End of Sections group
 
+/*! @name Align
+ * Align related functions
+ */ //@{
+	void buildAlignItemList(Selection* customSelection=0);
+	bool startAlign();
+	void endAlign();
+//@} // End of align functions
 
 	/**
 	 * @brief Return the guarded object associated with the document
@@ -1112,9 +1119,6 @@ public:
 	void updateAllItemQColors();
 	//! @brief Some internal align tools
 	typedef enum {alignFirst, alignLast, alignPage, alignMargins, alignGuide, alignSelection } AlignTo;
-	void buildAlignItemList(Selection* customSelection=0);
-	bool startAlign();
-	void endAlign();
 	/**
 	 * \brief Insert a color into the documents color list
 	 * @param nam Name of the colour
