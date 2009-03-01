@@ -1064,6 +1064,25 @@ public:
 	bool lineStylesUseColor(const QString& colorName);
 //@} // End of color functions
 
+/*! @name Font
+ * font related funtions.
+ */ //@{
+	/*!
+	 * Add a font
+	 */
+	bool AddFont(QString name, int fsize = 10);
+	/*!
+	 * TODO: Reorganise the fonts.. how? Moved from scribus.cpp
+	 * CB: almost the same as getUsedFonts???
+	 */
+	QMap<QString,int> reorganiseFonts();
+	/*!
+	 * Returns a qmap of the fonts and  their glyphs used within the document.
+	 */
+	void getUsedFonts(QMap<QString,QMap<uint, FPointArray> > &Really);
+	void checkItemForFonts(PageItem *it, QMap<QString, QMap<uint, FPointArray> > & Really, uint lc);
+//@} // End of font functions
+
 	/**
 	 * @brief Return the guarded object associated with the document
 	 */
@@ -1093,18 +1112,6 @@ public:
 	 * @author Riku Leino
 	 */
 	void restore(UndoState* state, bool isUndo);
-
-	bool AddFont(QString name, int fsize = 10);
-	/*!
-	 * @brief TODO: Reorganise the fonts.. how? Moved from scribus.cpp
-	 * CB: almost the same as getUsedFonts???
-	 */
-	QMap<QString,int> reorganiseFonts();
-	/*!
-	 * @brief Returns a qmap of the fonts and  their glyphs used within the document
-	 */
-	void getUsedFonts(QMap<QString,QMap<uint, FPointArray> > &Really);
-	void checkItemForFonts(PageItem *it, QMap<QString, QMap<uint, FPointArray> > & Really, uint lc);
 
 	/*!
 	* @brief Set the patterns for a document
