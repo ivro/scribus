@@ -114,6 +114,17 @@ class SCRIBUS_API ScribusDoc : public QObject, public UndoObject, public Observa
 	Q_OBJECT
 
 public:
+	/*! Some internal align tools. */
+//ivro: is this cannot be moved elsewhere ?
+	typedef enum {
+		alignFirst,
+		alignLast,
+		alignPage,
+		alignMargins,
+		alignGuide,
+		alignSelection
+	} AlignTo;
+
 	ScribusDoc();
 	ScribusDoc(const QString& docName, int unitIndex, const PageSize& pagesize, const MarginStruct& margins, const DocPagesSetup& pagesSetup);
 	~ScribusDoc();
@@ -1099,95 +1110,11 @@ public:
 	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
 //@} // End of patterns functions
 
-	/**
-	 * @brief Return the guarded object associated with the document
-	 */
-	const ScGuardedPtr<ScribusDoc>& guardedPtr() const;
-
-	UpdateManager* updateManager() { return &m_updateManager; }
-	MassObservable<PageItem*> * itemsChanged() { return &m_itemsChanged; }
-	MassObservable<Page*>     * pagesChanged() { return &m_pagesChanged; }
-	MassObservable<QRectF>    * regionsChanged() { return &m_regionsChanged; }
-	void invalidateRegion(QRectF region);
-
-	// Add, delete and move pages
-
-	//! @brief Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
-	void createDefaultMasterPages();
-	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
-	void createNewDocPages(int pageCount);
-
-
-	void getNamedResources(ResourceCollection& lists) const;
-	void replaceNamedResources(ResourceCollection& newNames);
-
-	/**
-	 * @brief Method used when an undo/redo is requested.
-	 * @param state State describing the action that is wanted to be undone/redone
-	 * @param isUndo If true undo is wanted else if false redo.
-	 * @author Riku Leino
-	 */
-	void restore(UndoState* state, bool isUndo);
-
-	/**
-	 * @brief Undo function for applying a master page
-	 */
-	void restoreMasterPageApplying(SimpleState *state, bool isUndo);
-	void restorePageCopy(SimpleState *state, bool isUndo);
-	/**
-	 * @brief Undo function for grouping/ungrouping
-	 */
-	void restoreGrouping(SimpleState *state, bool isUndo);
-	void restoreUngrouping(SimpleState *state, bool isUndo);
-	/**
-	 * @brief Save function
-	 */
-	bool save(const QString& fileName, QString* savedFile = NULL);
-	/**
-	 * @brief Sets up the ScText defaults from the document
-	 */
-	void setScTextDefaultsFromDoc(ScText *);
-	
-	/**
-	 * @brief Load images into an image frame, moved from the view
-	 * @retval Return false on failure
-	 */
-	bool LoadPict(QString fn, int ItNr, bool reload = false, bool showMsg = false);
-	/**
-	 * 
-	 * @param fn 
-	 * @param pageItem 
-	 * @param reload 
-	 * @return 
-	 */
-	bool loadPict(QString fn, PageItem *pageItem, bool reload = false, bool showMsg = false);
-	/**
-	 * \brief Handle image with color profiles
-	 * @param Pr profile
-	   @param PrCMYK cmyk profile
-	   @param dia optional progress widget
-	 */
-	void RecalcPictures(ProfilesL *Pr, ProfilesL *PrCMYK, QProgressBar *dia = 0);
-	/**
-	 * @brief Find the minX,MinY and maxX,maxY for the canvas required for the doc
-	 */
-	void canvasMinMax(FPoint&, FPoint&);
-	
-	int OnPage(double x2, double  y2);
-	int OnPage(PageItem *currItem);
-	void GroupOnPage(PageItem *currItem);
-	//void reformPages(double& maxX, double& maxY, bool moveObjects = true);
-	void reformPages(bool moveObjects = true);
-	
-	/**
-	 * @brief Update the fill and line QColors for all items in the doc
-	 */
-	void updateAllItemQColors();
-	//! @brief Some internal align tools
-	typedef enum {alignFirst, alignLast, alignPage, alignMargins, alignGuide, alignSelection } AlignTo;
-	
-	QMap<QString, double>& constants() { return m_constants; }
-	
+/*! @name Item selection
+ * Item selection related functions.
+ *
+ * Item selection is used to modify items.
+ */ //@{
 	bool sendItemSelectionToBack();
 	bool bringItemSelectionToFront();
 
@@ -1229,43 +1156,258 @@ public:
 	void itemSelection_SetStrikethru(int pos, int wid, Selection* customSelection=0);
 	void itemSelection_SetEffects(int s, Selection* customSelection=0);
 	void itemSelection_SetOpticalMargins(int i, Selection* customSelection=0);
-	void itemSelection_resetOpticalMargins(Selection* customSelection=0);
 	void itemSelection_SetColorProfile(const QString& profileName, Selection* customSelection=0);
 	void itemSelection_SetRenderIntent(int intentIndex, Selection* customSelection=0);
-	
+
 //	void chAbStyle(PageItem *currItem, int s);
 
 	void itemSelection_SetTracking(int us, Selection* customSelection=0);
 	void itemSelection_SetFontSize(int size, Selection* customSelection=0);
+public slots:
+	void itemSelection_ToggleLock();
+	void itemSelection_ToggleSizeLock();
+	void itemSelection_ToggleImageShown();
+	void itemSelection_TogglePrintEnabled();
+	void itemSelection_ChangePreviewResolution(int id);
+	void itemSelection_ClearItem(Selection* customSelection=0);
+	//! Delete the items in the current selection. When force is true, we do not warn the user and make SE happy too. Force is used from @sa Page::restorePageItemCreation
+	void itemSelection_DeleteItem(Selection* customSelection=0, bool forceDeletion=false);
+	void itemSelection_SetItemFillTransparency(double t);
+	void itemSelection_SetItemLineTransparency(double t);
+	void itemSelection_SetItemFillBlend(int t);
+	void itemSelection_SetItemLineBlend(int t);
+	void itemSelection_SetLineGradient(VGradient& newGradient, Selection* customSelection=0);
+	void itemSelection_SetFillGradient(VGradient& newGradient, Selection* customSelection=0);
+	void itemSelection_SetOverprint(bool overprint, Selection* customSelection=0);
+	void itemSelection_ApplyImageEffects(ScImageEffectList& newEffectList, Selection* customSelection=0);
+	void itemSelection_FlipH();
+	void itemSelection_FlipV();
+	void itemSelection_DoHyphenate();
+	void itemSelection_DoDeHyphenate();
+	void itemSelection_SendToLayer(int layerNumber);
+	void itemSelection_SetImageOffset(double x, double y, Selection* customSelection=0);
+	void itemSelection_SetImageScale(double x, double y, Selection* customSelection=0);
+	void itemSelection_SetImageScaleAndOffset(double ox, double oy, double sx, double sy, Selection* customSelection=0);
+	void itemSelection_AlignLeftOut(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignRightOut(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignBottomIn(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignRightIn(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignBottomOut(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignCenterHor(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignLeftIn(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignCenterVer(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignTopOut(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_AlignTopIn(AlignTo currAlignTo, double guidePosition);
+	void itemSelection_DistributeDistH(bool usingDistance=false, double distance=0.0);
+	void itemSelection_DistributeAcrossPage(bool useMargins=false);
+	void itemSelection_DistributeRight();
+	void itemSelection_DistributeBottom();
+	void itemSelection_DistributeCenterH();
+	void itemSelection_DistributeDistV(bool usingDistance=false, double distance=0.0);
+	void itemSelection_DistributeDownPage(bool useMargins=false);
+	void itemSelection_DistributeLeft();
+	void itemSelection_DistributeCenterV();
+	void itemSelection_DistributeTop();
+	void itemSelection_MultipleDuplicate(ItemMultipleDuplicateData&);
+	void itemSelection_UniteItems(Selection* customSelection=0);
+	void itemSelection_SplitItems(Selection* customSelection=0);
+	/*! Adjust an image frame's size to fit the size of the image in it. */
+	void itemSelection_AdjustFrametoImageSize(Selection* customSelection=0);
+	/*! Adjust an image size to fit the size of the frame. */
+	void itemSelection_AdjustImagetoFrameSize(Selection* customSelection=0);
+	/*! startArrowID or endArrowID of -1 mean not applying a selection at this point.*/
+	void itemSelection_ApplyArrowHead(int startArrowID=-1, int endArrowID=-1, Selection* customSelection=0);
 
+	void itemSelection_SetItemPen(QString farbe);
+	void itemSelection_SetItemPenShade(int sha);
+	void itemSelection_SetItemBrush(QString farbe);
+	void itemSelection_SetItemBrushShade(int sha);
+	void itemSelection_SetItemGradFill(int typ);
+	void itemSelection_SetItemPatternFill(QString pattern);
+	void itemSelection_SetItemPatternProps(double scaleX, double scaleY, double offsetX, double offsetY, double rotation);
+//@} // End of item selection group
 
-	
+public:
+
+/*! @name Various functions
+ */ //@{
+
+	/*!
+	 * Save function.
+	 */
+	bool save(const QString& fileName, QString* savedFile = NULL);
+
+	/*!
+	 * Create the default master pages based on the layout selected by the user, ie, Normal, Normal Left, etc.
+	 */
+	void createDefaultMasterPages();
+	/*!
+	 * Create the requested pages in a new document.
+	 * Run after ScribusDoc.createDefaultMasterPages()
+	 * @param pageCount number of page to create
+	 */
+	void createNewDocPages(int pageCount);
+
+	/*!
+	 * Update the fill and line QColors for all items in the doc.
+	 */
+	void updateAllItemQColors();
+
+	/*!
+	 * Sets up the ScText defaults from the document.
+	 */
+	void setScTextDefaultsFromDoc(ScText *);
+
+// Restore
+
+	/*!
+	 * Method used when an undo/redo is requested.
+	 * @param state State describing the action that is wanted to be undone/redone
+	 * @param isUndo If true undo is wanted else if false redo.
+	 * @author Riku Leino
+	 */
+	void restore(UndoState* state, bool isUndo);
+	/*!
+	 * Undo function for applying a master page.
+	 */
+	void restoreMasterPageApplying(SimpleState *state, bool isUndo);
+	/*!
+	 * Undo function for copy a page.
+	 */
+	void restorePageCopy(SimpleState *state, bool isUndo);
+	/*!
+	 * Undo function for grouping/ungrouping.
+	 */
+	void restoreGrouping(SimpleState *state, bool isUndo);
+	void restoreUngrouping(SimpleState *state, bool isUndo);
+// Loading images
+
+	/*!
+	 * Load images into an image frame, moved from the view.
+	 * @param fn image file name
+	 * @param ItNr page item number
+	 * @param reload
+	 * @param showMsg
+	 * @return Return false on failure
+	 */
+	bool LoadPict(QString fn, int ItNr, bool reload = false, bool showMsg = false);
+	/*!
+	 * Load images into an image frame.
+	 * @param fn image file name
+	 * @param pageItem page item
+	 * @param reload
+	 * @param showMsg
+	 * @return Return false on failure
+	 */
+	bool loadPict(QString fn, PageItem *pageItem, bool reload = false, bool showMsg = false);
+	/*!
+	 * Handle image with color profiles.
+	 * @param Pr profile
+	 * @param PrCMYK cmyk profile
+	 * @param dia optional progress widget
+	 */
+	void RecalcPictures(ProfilesL *Pr, ProfilesL *PrCMYK, QProgressBar *dia = 0);
+public slots:
+	/*! Update all the picture in the current selection. */
+	void updatePic();
+	/*! Update the specified picture. */
+	void updatePict(QString name);
+	/*! Update all picture in the specified directory. */
+	void updatePictDir(QString name);
+	/*! Remove a picture from document. */
+	void removePict(QString name);
+public:
+	/*!
+	 * Find the minX,MinY and maxX,maxY for the canvas required for the doc.
+	 * @param minPoint
+	 * @param maxPoint
+	 */
+	void canvasMinMax(FPoint& minPoint, FPoint& maxPoint);
+
+	/*!
+	 * Find page index where the point exists.
+	 * In masterPage mode return the current master page index if the point exists on the current master page,
+	 * In normal mode return the first page index where this point exists.
+	 *
+	 * @param x X coord of the point
+	 * @param y Y coord of the point
+	 * @return page index or -1
+	 */
+	int OnPage(double x, double  y);
+	/*!
+	 * Find page index where the item exists.
+	 * In masterPageMode return the current master page index if the item exists on the current master page.
+	 * In mormal mode return the page index where this item exists.
+	 *
+	 * @param item item we looking for
+	 * @return page index or -1
+	 */
+	int OnPage(PageItem *item);
+
+	void GroupOnPage(PageItem *currItem);
+	//void reformPages(double& maxX, double& maxY, bool moveObjects = true);
+	void reformPages(bool moveObjects = true);
 	void setRedrawBounding(PageItem *currItem);
 	void adjustCanvas(FPoint minPos, FPoint maxPos, bool absolute = false);
 	void recalcPicturesRes(bool applyNewRes = false);
 	void connectDocSignals();
+
+// Named Ressources
+
+	void getNamedResources(ResourceCollection& lists) const;
+	void replaceNamedResources(ResourceCollection& newNames);
+
+
+	QMap<QString, double>& constants() { return m_constants; }
+
+// Grid and Guides
+
+	/*! \brief Apply grid to a QPoint, from ScribusView. */
+	QPoint ApplyGrid(const QPoint& in);
+	/*! \brief Apply grid to an FPoint, from ScribusView. */
+	FPoint ApplyGridF(const FPoint& in);
+
+	//! \brief Get the closest guide to the given point.
+	void getClosestGuides(double xin, double yin, double *xout, double *yout, int *GxM, int *GyM);
+	//! \brief Snap an item to the guides.
+	void SnapToGuides(PageItem *currItem);
+	bool ApplyGuides(double *x, double *y);
+
+	/*! \brief Does this doc have any TOC setups and potentially a TOC to generate. */
+	bool hasTOCSetup() { return !docToCSetups.empty(); }
+
+// Group
+
+	void moveGroup(double x, double y, bool fromMP = false, Selection* customSelection = 0);
+	void rotateGroup(double angle, FPoint RCenter);
+	void scaleGroup(double scx, double scy, bool scaleText=true, Selection* customSelection = 0);
+
+	/*!
+	 * Return the guarded object associated with the document.
+	 */
+	const ScGuardedPtr<ScribusDoc>& guardedPtr() const;
+
+	UpdateManager* updateManager() { return &m_updateManager; }
+	MassObservable<PageItem*> * itemsChanged() { return &m_itemsChanged; }
+	MassObservable<Page*>     * pagesChanged() { return &m_pagesChanged; }
+	MassObservable<QRectF>    * regionsChanged() { return &m_regionsChanged; }
+	void invalidateRegion(QRectF region);
+
+	void undoRedoBegin();
+	void undoRedoDone();
+
+protected:
+	void addSymbols();
+//@} // End of various group
+
+public:
 	/*! \brief We call changed() whenever the document needs to know it has been changed.
 	 *  If the document is the primary document in a main window, it will signal to enable/disable
 	 * certain operations.
 	 */
 	void changed();
-	/*! \brief Apply grid to a QPoint, from ScribusView */
-	QPoint ApplyGrid(const QPoint& in);
-	/*! \brief Apply grid to an FPoint, from ScribusView */
-	FPoint ApplyGridF(const FPoint& in);
-	/*! \brief Does this doc have any TOC setups and potentially a TOC to generate */
-	bool hasTOCSetup() { return !docToCSetups.empty(); }
-	//! \brief Get the closest guide to the given point
-	void getClosestGuides(double xin, double yin, double *xout, double *yout, int *GxM, int *GyM);
-	//! \brief Snap an item to the guides
-	void SnapToGuides(PageItem *currItem);
-	bool ApplyGuides(double *x, double *y);
-	void moveGroup(double x, double y, bool fromMP = false, Selection* customSelection = 0);
-	void rotateGroup(double angle, FPoint RCenter);
-	void scaleGroup(double scx, double scy, bool scaleText=true, Selection* customSelection = 0);
-	
+
 protected:
-	void addSymbols();
 	ApplicationPrefs& prefsData;
 	UndoManager * const undoManager;
 	int ActiveLayer;
@@ -1479,85 +1621,10 @@ signals:
 	void widthAndHeight(double, double);
 	
 public slots:
-	void itemSelection_ToggleLock();
-	void itemSelection_ToggleSizeLock();
-	void itemSelection_ToggleImageShown();
-	void itemSelection_TogglePrintEnabled();
-	void itemSelection_ChangePreviewResolution(int id);
-
 	/*! \brief Change display quality of all images in document.
 	\author  OssiLehtinen
 	*/
 	void allItems_ChangePreviewResolution(int id);
-
-	void itemSelection_ClearItem(Selection* customSelection=0);
-	//! Delete the items in the current selection. When force is true, we do not warn the user and make SE happy too. Force is used from @sa Page::restorePageItemCreation
-	void itemSelection_DeleteItem(Selection* customSelection=0, bool forceDeletion=false);
-	void itemSelection_SetItemFillTransparency(double t);
-	void itemSelection_SetItemLineTransparency(double t);
-	void itemSelection_SetItemFillBlend(int t);
-	void itemSelection_SetItemLineBlend(int t);
-	void itemSelection_SetLineGradient(VGradient& newGradient, Selection* customSelection=0);
-	void itemSelection_SetFillGradient(VGradient& newGradient, Selection* customSelection=0);
-	void itemSelection_SetOverprint(bool overprint, Selection* customSelection=0);
-	void itemSelection_ApplyImageEffects(ScImageEffectList& newEffectList, Selection* customSelection=0);
-	void itemSelection_FlipH();
-	void itemSelection_FlipV();
-	void itemSelection_DoHyphenate();
-	void itemSelection_DoDeHyphenate();
-	void itemSelection_SendToLayer(int layerNumber);
-	void itemSelection_SetImageOffset(double x, double y, Selection* customSelection=0);
-	void itemSelection_SetImageScale(double x, double y, Selection* customSelection=0);
-	void itemSelection_SetImageScaleAndOffset(double ox, double oy, double sx, double sy, Selection* customSelection=0);
-	void itemSelection_AlignLeftOut(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignRightOut(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignBottomIn(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignRightIn(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignBottomOut(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignCenterHor(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignLeftIn(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignCenterVer(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignTopOut(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_AlignTopIn(AlignTo currAlignTo, double guidePosition);
-	void itemSelection_DistributeDistH(bool usingDistance=false, double distance=0.0);
-	void itemSelection_DistributeAcrossPage(bool useMargins=false);
-	void itemSelection_DistributeRight();
-	void itemSelection_DistributeBottom();
-	void itemSelection_DistributeCenterH();
-	void itemSelection_DistributeDistV(bool usingDistance=false, double distance=0.0);
-	void itemSelection_DistributeDownPage(bool useMargins=false);
-	void itemSelection_DistributeLeft();
-	void itemSelection_DistributeCenterV();
-	void itemSelection_DistributeTop();
-	void itemSelection_MultipleDuplicate(ItemMultipleDuplicateData&);
-	void itemSelection_UniteItems(Selection* customSelection=0);
-	void itemSelection_SplitItems(Selection* customSelection=0);
-	/**
-	 * Adjust an image frame's size to fit the size of the image in it
-	 */
-	void itemSelection_AdjustFrametoImageSize(Selection* customSelection=0);
-	/**
-	 * Adjust an image size to fit the size of the frame
-	 */
-	void itemSelection_AdjustImagetoFrameSize(Selection* customSelection=0);
-	//! @brief startArrowID or endArrowID of -1 mean not applying a selection at this point.
-	void itemSelection_ApplyArrowHead(int startArrowID=-1, int endArrowID=-1, Selection* customSelection=0);
-
-	void itemSelection_SetItemPen(QString farbe);
-	void itemSelection_SetItemPenShade(int sha);
-	void itemSelection_SetItemBrush(QString farbe);
-	void itemSelection_SetItemBrushShade(int sha);
-	void itemSelection_SetItemGradFill(int typ);
-	void itemSelection_SetItemPatternFill(QString pattern);
-	void itemSelection_SetItemPatternProps(double scaleX, double scaleY, double offsetX, double offsetY, double rotation);
-
-	void undoRedoBegin();
-	void undoRedoDone();
-
-	void updatePic();
-	void updatePict(QString name);
-	void updatePictDir(QString name);
-	void removePict(QString name);
 
 public:
 	QList<Page*>* Pages;			/*!< Pointer on a list of pages. See masterPageMode() */
