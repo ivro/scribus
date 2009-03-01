@@ -688,7 +688,202 @@ public:
 	void orderedLayerList(QStringList* list);
 //@} // End of Layer function
 
+/*! @name Item
+ * Item related functions.
+ */ //@{
+	// Add
 
+	/*!
+	 * Add an Item to the document.
+	 * A simple function to create an item of a defined type and add it to the document
+	 * Will need extensive rewriting once we have various classes of PageItems, at a guess.
+	 *
+	 * @param itemType type
+	 * @param frameType frame type
+	 * @param x X pos
+	 * @param y Y pos
+	 * @param b width
+	 * @param h height
+	 * @param w ?
+	 * @param fill fill color name
+	 * @param outline outline color name
+	 * @param itemFinalised Used to handle item creation for undo while the user is still dragging.
+	 * @return Number of created item, -1 on failure.
+	 */
+	int itemAdd(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double b, const double h, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
+	/*!
+	 * Add an Item to the page.
+	 * Item will be fitted to the closest guides/margins of the x/y position.
+	 *
+	 * @param itemType type
+	 * @param itemFramType frame type
+	 * @param x X pos
+	 * @param y Y pos
+	 * @param w ?
+	 * @param fill fill color name
+	 * @param outline outline color name
+	 * @param itemFinalised Used to handle item creation for undo while the user is still dragging
+	 * @return Number of created item, -1 on failure.
+	 */
+	int itemAddArea(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
+	/*!
+	 * Allow the user to create a frame easily with some simple placement and sizing options.
+	 * @param iafData a InsertAFrameData structure with params
+	 * @return int item id? FIXME
+	 */
+	int itemAddUserFrame(InsertAFrameData &iafData);
+	/*!
+	 * Commit item creation when a user has click-drag created an item.
+	 * Only called from ScribusView. Note the undo target is the page, so the undo code remains their for now.
+	 *
+	 * @return If an item was committed and the view must emit its signal, which needs removing from here, TODO.
+	 */
+	bool itemAddCommit(const int itemNumber);
+	/*!
+	 * Finalise item creation, only to be called from itemAdd().
+	 * Simply split off code from itemAdd.
+	 *
+	 * @param itemType type
+	 * @param frameType frame type
+	 * @param itemNumber item index
+	 */
+	void itemAddDetails(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const int itemNumber);
+	/*!
+	 * Item type conversion functions.
+	 * @param currItem item to convert
+	 * @param newType
+	 * @param secondaryItem ?
+	 */
+	PageItem* convertItemTo(PageItem *currItem, PageItem::ItemType newType, PageItem* secondaryItem=NULL);
+	/*!
+	 * Paste an item to the document.
+	 * The bulk of a paste item process runs here for want of a better place, but its a better place
+	 * than the view where it used to be.
+	 * TODO Once the pageitem restructure is done, this is probably unnecessary but it removes the
+	 * unnecessary part from the view for now which is overloaded with non ScrollView code.
+	 */
+	//TODO: void PasteItem(struct CopyPasteBuffer *Buffer, bool loading, bool drag = false);
+
+	//itemDelete
+	//itemBlah...
+
+	// move, rotate, resize items
+
+	/*!
+	 * Move item.
+	 * @param newX new X coord
+	 * @param newY new Y coord
+	 * @param item page item to move
+	 * @param fromMP ?
+	 */
+//ivro: standardize param order as PageItem changed each function ?
+//	something like item, args, options ?
+	bool MoveItem(double newX, double newY, PageItem* ite, bool fromMP = false);
+	/*!
+	 * Rotate Item.
+	 * @param angle angle to rotate
+	 * @param itemNumber index of the item to rotate
+	 */
+	void RotateItem(double angle, int itemNumber);
+	/*!
+	 * Rotate Item.
+	 * @param angle angle to rotate
+	 * @param currItem page item to rotate
+	 */
+	void RotateItem(double angle, PageItem *currItem);
+	/*!
+	 * Move and Rotate Item.
+	 * @param currItem page item to transform
+	 * @param npv ?
+	 * @param fromMP ?
+	 */
+	void MoveRotated(PageItem *currItem, FPoint npv, bool fromMP = false);
+	/*!
+	 * Resize item.
+	 * @param newX new X coord
+	 * @param newY new Y coord
+	 * @param ite index of page item to resize
+	 * @param fromMp ?
+	 * @param DoUpdateClip ?
+	 * @param redraw ?
+	 */
+	bool SizeItem(double newX, double newY, int ite, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
+	/*!
+	 * Resize item.
+	 * @param newX new X coord
+	 * @param newY new Y coord
+	 * @param pi page item to resize
+	 * @param fromMp ?
+	 * @param DoUpdateClip ?
+	 * @param redraw ?
+	 */
+	bool SizeItem(double newX, double newY, PageItem *pi, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
+	/*!
+	 * Size and Move item.
+	 * @param newX new X coord
+	 * @param newY new Y coord
+	 * @param ite index of page item to transform
+	 * @param fromMp ?
+	 * @param constrainRotation ?
+	 */
+	bool MoveSizeItem(FPoint newX, FPoint newY, int ite, bool fromMP = false, bool constrainRotation=false);
+//ivro: don't know what it does
+	void AdjustItemSize(PageItem *currItem);
+
+	//void FlipImageH();
+	//void FlipImageV();
+	void MirrorPolyH(PageItem *currItem);
+	void MirrorPolyV(PageItem *currItem);
+
+	// Various
+
+	/*!
+	 * Delete the tagged items.
+	 * Currently does nothing
+	 */
+	bool deleteTaggedItems();
+	/*!
+	 * Get the item index from a unique ID.
+	 * @param unique ID of item
+	 * @return index of the item
+	 */
+	uint getItemNrfromUniqueID(uint unique);
+	/*!
+	 * Run this common frame item update code.
+	 */
+	void updateFrameItems();
+	/*!
+	 * Renumbers the items into the order they are stored in in the lists.
+	 * Utility function used in various places, basically handles keeping items numbered in the way
+	 * they are layered. When layer is a property and not a fuction of storage, this should be removed.
+	 * Depends on the Items pointer pointing to the correct item list (doc, master, etc).
+	 * @sa updateFrameItems();
+	 */
+	void renumberItemsInListOrder();
+	/*!
+	 * Rebuild item lists taking into account layer order.
+	 * Utility function used in various places, basically handles keeping items numbered in the way
+	 * they are layered. When layer is a property and not a fuction of storage, this should be removed.
+	 * @sa updateFrameItems();
+	 */
+	void rebuildItemLists();
+	/*!
+	 * Find if item is not an already used item.
+	 * Return true if the passed name is not used by any existing PageItem
+	 *        in the same document as this PageItem.
+	 * @author Craig Ringer
+	 ** CB Moved from PageItem
+	 */
+//ivro: is returning true if the passed name exists not better ? (or rename to itemNameDontUses ?)
+	bool itemNameExists(const QString itemName);
+	/*!
+	 * Returns a stringlist of the item attributes within the document.
+	 */
+	QStringList getItemAttributeNames();
+
+	/*! Get a list of frames of certain type. */
+	QMap<PageItem*, QString> getDocItemNames(PageItem::ItemType itemType);
+//@} //End Items group
 	/**
 	 * @brief Return the guarded object associated with the document
 	 */
@@ -707,8 +902,6 @@ public:
 	//! @brief Create the requested pages in a new document, run after createDefaultMasterPages()
 	void createNewDocPages(int pageCount);
 
-	//Items
-	bool deleteTaggedItems();
 
 	/*!
 		* @brief Builds a qmap of the icc profiles used within the document
@@ -774,10 +967,6 @@ public:
 	 * @author Riku Leino
 	 */
 	void restore(UndoState* state, bool isUndo);
-	/*!
-	 * @brief Returns a stringlist of the item attributes within the document
-	 */
-	QStringList getItemAttributeNames();
 
 	bool AddFont(QString name, int fsize = 10);
 	/*!
@@ -836,80 +1025,6 @@ public:
 	 * @brief Sets up the ScText defaults from the document
 	 */
 	void setScTextDefaultsFromDoc(ScText *);
-	/**
-	 * @brief Paste an item to the document.
-	 * The bulk of a paste item process runs here for want of a better place, but its a better place
-	 * than the view where it used to be. 
-	 * TODO Once the pageitem restructure is done, this is probably unnecessary but it removes the 
-	 * unnecessary part from the view for now which is overloaded with non ScrollView code.
-	 */
-	//TODO: void PasteItem(struct CopyPasteBuffer *Buffer, bool loading, bool drag = false);
-	
-	/**
-	 * @brief Add an Item to the document.
-	 * A simple function to create an item of a defined type and add it to the document
-	 * Will need extensive rewriting once we have various classes of PageItems, at a guess.
-	 *
-	 * @param itemFinalised Used to handle item creation for undo while the user is still dragging.
-	 * @return Number of created item, -1 on failure.
-	\param itemType type
-	\param frameType frame type
-	\param x X pos
-	\param y Y pos
-	\param b width
-	\param h height
-	\param w ?
-	\param fill fill color name
-	\param outline outline color name
-	*/
-	int itemAdd(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double b, const double h, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
-
-	/** Add an item to the page based on the x/y position. Item will be fitted to the closest guides/margins */
-	int itemAddArea(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
-	
-	/**
-	 * @brief Allow the user to create a frame easily with some simple placement and sizing options
-	 * @param iafData a InsertAFrameData structure with params
-	 * @return int item id? FIXME
-	 */
-	int itemAddUserFrame(InsertAFrameData &iafData);
-
-	/**
-	 * @brief Commit item creation when a user has click-drag created an item
-	 * Only called from ScribusView. Note the undo target is the page, so the undo code remains their for now.
-	 * @return If an item was committed and the view must emit its signal, which needs removing from here, TODO.
-	 */
-	bool itemAddCommit(const int itemNumber);
-	
-	/**
-	 * @brief Finalise item creation. Simply split off code from itemAdd
-	 * Only to be called from itemAdd()
-	 */
-	void itemAddDetails(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const int itemNumber);
-
-	uint getItemNrfromUniqueID(uint unique);
-	//itemDelete
-	//itemBlah...
-	
-	/**
-	 * @brief Run this common frame item update code
-	 */
-	void updateFrameItems();
-	/**
-	 * @brief Renumbers the items into the order they are stored in in the lists.
-	 * Utility function used in various places, basically handles keeping items numbered in the way
-	 * they are layered. When layer is a property and not a fuction of storage, this should be removed.
-	 * Depends on the Items pointer pointing to the correct item list (doc, master, etc).
-	 * @sa updateFrameItems();
-	 */
-	void renumberItemsInListOrder();
-	/**
-	 * @brief Rebuild item lists taking into account layer order.
-	 * Utility function used in various places, basically handles keeping items numbered in the way
-	 * they are layered. When layer is a property and not a fuction of storage, this should be removed.
-	 * @sa updateFrameItems();
-	 */
-	void rebuildItemLists();
 	
 	/**
 	 * @brief Load images into an image frame, moved from the view
@@ -941,19 +1056,6 @@ public:
 	void GroupOnPage(PageItem *currItem);
 	//void reformPages(double& maxX, double& maxY, bool moveObjects = true);
 	void reformPages(bool moveObjects = true);
-	
-	/**
-	 * @brief Item type conversion functions
-	 */
-	PageItem* convertItemTo(PageItem *currItem, PageItem::ItemType newType, PageItem* secondaryItem=NULL);
-	
-	/**
-	 * @brief Return true iff the passed name is not used by any existing PageItem
-	 *        in the same document as this PageItem.
-	 * @author Craig Ringer
-	 ** CB Moved from PageItem
-	 */
-	bool itemNameExists(const QString itemName);
 	
 	/**
 	 * @brief Add a section to the document sections list
@@ -1065,10 +1167,8 @@ public:
 
 	void itemSelection_SetTracking(int us, Selection* customSelection=0);
 	void itemSelection_SetFontSize(int size, Selection* customSelection=0);
-	//void FlipImageH();
-	//void FlipImageV();
-	void MirrorPolyH(PageItem *currItem);
-	void MirrorPolyV(PageItem *currItem);
+
+
 	
 	void setRedrawBounding(PageItem *currItem);
 	void adjustCanvas(FPoint minPos, FPoint maxPos, bool absolute = false);
@@ -1090,19 +1190,9 @@ public:
 	//! \brief Snap an item to the guides
 	void SnapToGuides(PageItem *currItem);
 	bool ApplyGuides(double *x, double *y);
-	bool MoveItem(double newX, double newY, PageItem* ite, bool fromMP = false);
-	void RotateItem(double win, int ite);
-	void RotateItem(double win, PageItem *currItem);
-	void MoveRotated(PageItem *currItem, FPoint npv, bool fromMP = false);
-	bool SizeItem(double newX, double newY, int ite, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
-	bool SizeItem(double newX, double newY, PageItem *pi, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
-	bool MoveSizeItem(FPoint newX, FPoint newY, int ite, bool fromMP = false, bool constrainRotation=false);
-	void AdjustItemSize(PageItem *currItem);
 	void moveGroup(double x, double y, bool fromMP = false, Selection* customSelection = 0);
 	void rotateGroup(double angle, FPoint RCenter);
 	void scaleGroup(double scx, double scy, bool scaleText=true, Selection* customSelection = 0);
-	//! \brief Get a list of frames of certain type
-	QMap<PageItem*, QString> getDocItemNames(PageItem::ItemType itemType);
 	
 protected:
 	void addSymbols();
