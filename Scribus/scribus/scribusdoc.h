@@ -1453,44 +1453,38 @@ public: // Public attributes
 	bool SnapGuides;
 	/** \brief Scratch space around Pages */
 	MarginStruct scratch;
-	double GapHorizontal;
-	double GapVertical;
+	double GapHorizontal;			/*!< Horizontal gap between page on canvas. */
+	double GapVertical;			/*!< Vertical gap betwwen page on canvas. */
 // 	double ScratchLeft;
 // 	double ScratchRight;
 // 	double ScratchTop;
 // 	double ScratchBottom;
-	/** \brief Minimum and Maximum Points of Document */
-	FPoint minCanvasCoordinate;
-	FPoint maxCanvasCoordinate;
+	FPoint minCanvasCoordinate;		/*!< Minimum point of document. */
+	FPoint maxCanvasCoordinate;		/*!< Maximum point of document. */
 	double rulerXoffset;
 	double rulerYoffset;
-	/** \brief List of Document Pages */
 	QList<PageItem*> FrameItems;
 	Selection* const m_Selection;
-	/** \brief Pagewidth  */
-	double pageWidth;
-	/** \brief Pageheight */
-	double pageHeight;
+	double pageWidth;			/*!< Default page's width. */
+	double pageHeight;			/*!< Default page's height. */
 	/* Number of Pages */
 	// int pageCount; Disabled CR no longer required
-	/** \brief Margins */
-	MarginStruct pageMargins;
+	MarginStruct pageMargins;		/*!< Default page's margins. */
 	int marginPreset;
-	QList<PageSet> pageSets;
-	MarginStruct bleeds;
+//ivro: is this cannot be moved elsewhere
+//	Save only the current pageSets and when we change it, copy the new here.
+	QList<PageSet> pageSets;		/*!< List of page layout supported by Scribus. */
+	int currentPageLayout;			/*!< Index of the currently used page layout. See ScribusDoc::pageSets. */
+	MarginStruct bleeds;			/*!< Default page's bleeds. */
 // 	double BleedTop;
 // 	double BleedLeft;
 // 	double BleedRight;
 // 	double BleedBottom;
-	/** \brief Number of Columns */
-	double PageSp;
-	/** \brief Distance of Columns */
-	double PageSpa;
-	/** \brief current Pagelayout */
-	int currentPageLayout;
-	/** \brief Flag fuer Hoch- oder Querformat 0 = Hochformat */
-	int PageOri;
-	QString m_pageSize;
+	double PageSp;				/*!< Number of Columns for AutomaticTextFrame. */
+	double PageSpa;				/*!< Distance between columns for AutomaticTextFrame. */
+//ivro: use the scribusstruct PageOrientation enum ?
+	int PageOri;				/*!< Default page's orientation. O => Portrait, 1 = Landscape. */
+	QString m_pageSize;			/*!< Default page's format. */
 	/** \brief Erste Seitennummer im Dokument */
 	int FirstPnum;
 	/** \brief Flag fuer Rasterbenutzung */
@@ -1517,10 +1511,8 @@ public: // Public attributes
 	toolPrefs toolSettings;
 	QMap<QString, checkerPrefs> checkerProfiles;
 	QString curCheckProfile;
-	/** \brief Letztes Element fuer AutoTextrahmen */
-	PageItem *LastAuto;
-	/** \brief Erstes Element fuer AutoTextrahmen */
-	PageItem *FirstAuto;
+	PageItem *LastAuto;			/*!< The last AutomaticTextFrame element. */
+	PageItem *FirstAuto;			/*!< The first AutomaticTextFrame element. */
 	bool DragP;
 	bool leaveDrag;
 	PageItem *DraggedElem;
@@ -1583,8 +1575,8 @@ public:
 	bool OldBM;
 	bool hasName;
 	int RotMode;
-	bool AutoSave;
-	int AutoSaveTime;
+	bool AutoSave;				/*!< Is autosaved ? */
+	int AutoSaveTime;			/*!< Time in milliseconds between autosave. */
 	QTimer * const autoSaveTimer;
 	QMap<QString,multiLine> MLineStyles;
 	QList<ArrowDesc> arrowStyles;
@@ -1605,7 +1597,7 @@ public:
 	//Attributes to be applied to frames
 	ObjAttrVector docItemAttributes;
 	ToCSetupVector docToCSetups;
-	DocumentSectionMap sections;		/*< Map of document's sections */
+	DocumentSectionMap sections;		/*!< Map of document's sections */
 	FPointArray symReturn;
 	FPointArray symNewLine;
 	FPointArray symTab;
