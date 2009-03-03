@@ -1396,16 +1396,45 @@ public:
 	void undoRedoBegin();
 	void undoRedoDone();
 
-protected:
-	void addSymbols();
-//@} // End of various group
-
 public:
 	/*! \brief We call changed() whenever the document needs to know it has been changed.
 	 *  If the document is the primary document in a main window, it will signal to enable/disable
 	 * certain operations.
 	 */
 	void changed();
+public slots:
+	/*! \brief Change display quality of all images in document.
+	\author  OssiLehtinen
+	*/
+	void allItems_ChangePreviewResolution(int id);
+protected:
+	void addSymbols();
+//@} // End of various group
+
+signals:
+	//Lets make our doc talk to our GUI rather than confusing all our normal stuff
+	/**
+	 * @brief Let the document tell whatever is listening that it has changed
+	 */
+	void docChanged();
+	void updateContents();
+	void updateContents(const QRect &r);
+	void refreshItem(PageItem *);
+	void canvasAdjusted(double width, double height, double dX, double dY);
+	void firstSelectedItemType(int);
+	void setApplicationMode(int);
+	/**
+	 * @brief A signal for when the outline palette needs to rebuild itself
+	 * Emit when:
+	 * - An item is created or deleted
+	 * - An item changes page
+	 * - An page is created or deleted
+	 * - Some items are grouped or a group is ungrouped
+	 * This also applies to Master Pages
+	 */
+	void signalRebuildOutLinePalette();
+	//! Temporary signal for SizeItem
+	void widthAndHeight(double, double);
 
 protected:
 	ApplicationPrefs& prefsData;
@@ -1594,37 +1623,6 @@ private:
 	MassObservable<Page*> m_pagesChanged;
 	MassObservable<QRectF> m_regionsChanged;
 	DocUpdater* m_docUpdater;
-	
-signals:
-	//Lets make our doc talk to our GUI rather than confusing all our normal stuff
-	/**
-	 * @brief Let the document tell whatever is listening that it has changed
-	 */
-	void docChanged();
-	void updateContents();
-	void updateContents(const QRect &r);
-	void refreshItem(PageItem *);
-	void canvasAdjusted(double width, double height, double dX, double dY);
-	void firstSelectedItemType(int);
-	void setApplicationMode(int);
-	/**
-	 * @brief A signal for when the outline palette needs to rebuild itself
-	 * Emit when:
-	 * - An item is created or deleted
-	 * - An item changes page
-	 * - An page is created or deleted
-	 * - Some items are grouped or a group is ungrouped
-	 * This also applies to Master Pages
-	 */
-	void signalRebuildOutLinePalette();
-	//! Temporary signal for SizeItem
-	void widthAndHeight(double, double);
-	
-public slots:
-	/*! \brief Change display quality of all images in document.
-	\author  OssiLehtinen
-	*/
-	void allItems_ChangePreviewResolution(int id);
 
 public:
 	QList<Page*>* Pages;			/*!< Pointer on a list of pages. See masterPageMode() */
