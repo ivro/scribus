@@ -61,15 +61,14 @@ public:
 	void setInitialWidth(const double);
 	void setInitialHeight(const double);
 	void copySizingProperties(Page *sourcePage, const MarginStruct& pageMargins);
-	MarginStruct Margins;
-	MarginStruct initialMargins;
+	MarginStruct Margins;		/*!< Page's margins. */
+	MarginStruct initialMargins;	/*!< Initial page's margins. */
   /** Nummer der Seite */
 	int LeftPg;
-	//! Name of the master page that this page uses
-	QString MPageNam;
+	QString MPageNam;		/*!< Name of the used master page. */
 
 	QString m_pageSize;
-	int PageOri;
+	int PageOri;			/*!< Page's orientation. O => Portrait, 1 => Landscape. */
 	int marginPreset;
 	ScribusDoc* doc() const { return m_Doc; }
 	void setDocument(ScribusDoc* doc);
@@ -97,16 +96,15 @@ protected:
 	void restorePageItemDeletion(ItemState<PageItem*> *state, bool isUndo);
 	void restorePageItemConversion(ItemState<std::pair<PageItem*, PageItem*> >*state, bool isUndo);
 	
-	double m_xOffset;
-	double m_yOffset;
-	double m_width;
-	double m_height;
-	double m_initialWidth;
-	double m_initialHeight;
-	int m_pageNr;
-	//! Name of this page, currently only allowed to be used by a master page
-	QString m_PageName;
-	ScribusDoc* m_Doc;	
+	double m_xOffset;		/*!< Page's X Offset. */
+	double m_yOffset;		/*!< Page's Y Offset. */
+	double m_width;			/*!< Page's width. */
+	double m_height;		/*!< Page's height. */
+	double m_initialWidth;		/*!< Initial page's width. */
+	double m_initialHeight;		/*!< Initial page's height. */
+	int m_pageNr;			/*!< Page's number. */
+	QString m_PageName;		/*!< Page's name. Currently only allowed to be used by a master page. */
+	ScribusDoc* m_Doc;		/*!< The document this page belongs to. */
 	QString m_pageSectionNumber;
 };
 
