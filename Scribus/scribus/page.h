@@ -40,9 +40,9 @@ class UndoState;
 class ScribusDoc;
 
 
-/**
-  *@author Franz Schmid
-  */
+/*!
+ * \author Franz Schmid
+ */
 class SCRIBUS_API Page : public UndoObject, public SingleObservable<Page>
 {
 public:
@@ -63,7 +63,7 @@ public:
 	void copySizingProperties(Page *sourcePage, const MarginStruct& pageMargins);
 	MarginStruct Margins;		/*!< \brief Page's margins. */
 	MarginStruct initialMargins;	/*!< \brief Initial page's margins. */
-  /** Nummer der Seite */
+	/*! \brief Nummer der Seite */
 	int LeftPg;
 	QString MPageNam;		/*!< \brief Name of the used master page. */
 

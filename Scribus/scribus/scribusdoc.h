@@ -163,9 +163,9 @@ public:
 	 * \brief Associate document and GUI.
 	 *
 	 * See ScribusDoc.hasGUI(), ScribusDoc.scMW() and ScribusDoc.view()
-	 * @param hasgui Is document associated with gui ?
-	 * @param mainWindow scribus main window
-	 * @param view scribus view
+	 * \param hasgui Is document associated with gui ?
+	 * \param mainWindow scribus main window
+	 * \param view scribus view
 	 */
 	void setGUI(bool hasgui, ScribusMainWindow* mainWindow, ScribusView* view);
 	/*!
@@ -178,7 +178,7 @@ public:
 	 * \brief Get the scribus main window associated with the document.
 	 *
 	 * See Scribus.setGUI()
-	 * @return the scribus man window
+	 * \return the scribus man window
 	 */
 //ivro: rename this function (mainWindow or scribusMainWindow) ?
 	ScribusMainWindow* scMW() const {return m_ScMW;}
@@ -186,7 +186,7 @@ public:
 	 * \brief Get the view associated with the document.
 	 *
 	 * See Scribus.setGUI()
-	 * @return the scribus view
+	 * \return the scribus view
 	 */
 	ScribusView* view() const;
 
@@ -208,9 +208,9 @@ public:
 	/*!
 	 * \brief Should guides be locked or not ?
 	 *
-	 * @param isLocked If true guides on pages cannot be moved if false they
+	 * \param isLocked If true guides on pages cannot be moved if false they
 	 * can be dragged to new positions.
-	 * @author Riku Leino
+	 * \author Riku Leino
 	 */
 	void lockGuides(bool isLocked);
 
@@ -253,12 +253,12 @@ public:
 	/*!
 	 * \brief Sets the name of the document.
 	 *
-	 * @param name Name for the document
-	 * @author Riku Leino
+	 * \param name Name for the document
+	 * \author Riku Leino
 	 */
 	void setName(const QString& name);
 
-/*! @name Master Page
+/*! \name Master Page
  * \brief Master page related functions.
  *
  * A master page is a model for page. Items on master pages will be repeated on each page with the master page.
@@ -288,28 +288,28 @@ public:
 	 * \brief Add a master page.
 	 *
 	 * Use this function to add a master page, do not use addPage
-	 * @param pageNumber index for the master page
-	 * @param pageName name of the master page
-	 * @return added page
+	 * \param pageNumber index for the master page
+	 * \param pageName name of the master page
+	 * \return added page
 	 */
 	Page* addMasterPage(const int pageNumber, const QString& pageName);
 	/*!
 	 * \brief Delete a master page.
 	 *
-	 * @param pageNumber index of the master page
+	 * \param pageNumber index of the master page
 	 */
 	void deleteMasterPage(const int pageNumber);
 	/*!
 	 * \brief Replace a master page by default one.
 	 *
-	 * @param oldMasterPage name of the master page to remplace
+	 * \param oldMasterPage name of the master page to remplace
 	 */
 	void replaceMasterPage(const QString& oldMasterPage);
 	/*!
 	 * \brief Rename a master page.
 	 *
-	 * @param oldPageName old name of the master page
-	 * @param newPageName new name for the master page
+	 * \param oldPageName old name of the master page
+	 * \param newPageName new name for the master page
 	 */
 	bool renameMasterPage(const QString& oldPageName, const QString& newPageName);
 	/*!
@@ -320,7 +320,7 @@ public:
 	void rebuildMasterNames(void);
 //@} // End of master page group
 
-/*! @name Page
+/*! \name Page
  * \brief Page related functions.
  *
  * A page represents a paper page. See Page::Page
@@ -331,25 +331,25 @@ public:
 	 * \brief Add a page.
 	 *
 	 * Do not use this to add a master page, use addMasterPage instead
-	 * @param pageNumber index for the page
-	 * @param masterPageName master page to use
-	 * @param addAutoFrame add automatic text frame
-	 * @return addedpage
+	 * \param pageNumber index for the page
+	 * \param masterPageName master page to use
+	 * \param addAutoFrame add automatic text frame
+	 * \return addedpage
 	 */
 	Page* addPage(const int pageNumber, const QString& masterPageName=QString::null, const bool addAutoFrame=false);
 	/*!
 	 * \brief Delete a page.
 	 *
-	 * @param pageNumber index of the page
+	 * \param pageNumber index of the page
 	 */
 	void deletePage(const int pageNumber);
 	/*!
 	 * \brief Move page(s) within the document.
 	 *
-	 * @param from page index
-	 * @param to page index
-	 * @param ziel page index of the target to move to
-	 * @param art Before (0), After (1) or At the end (2)
+	 * \param from page index
+	 * \param to page index
+	 * \param ziel page index of the target to move to
+	 * \param art Before (0), After (1) or At the end (2)
 	 */
 //ivro: create typedef for param art (like whereToMove) ?
 	void movePage(const int from, const int to, const int ziel, const int art);
@@ -357,10 +357,10 @@ public:
 	 * \brief Copy a page.
 	 *
 	 * Copy a page (pageNumberToCopy) copyCount times, whereToInsert(before or after) the existingPage or at the end.
-	 * @param pageNumberToCopy index of the page
-	 * @param existingPage where to copy (page index)
-	 * @param whereToInsert Before (0), After (1) or At the end (2)
-	 * @param copyCount number of copy
+	 * \param pageNumberToCopy index of the page
+	 * \param existingPage where to copy (page index)
+	 * \param whereToInsert Before (0), After (1) or At the end (2)
+	 * \param copyCount number of copy
 	 */
 //ivro: use typedef whereToMove for param whereToInsert ?
 	void copyPage(int pageNumberToCopy, int existingPage, int whereToInsert, int copyCount);
@@ -370,48 +370,48 @@ public:
 	/*!
 	 * \brief Set page properties.
 	 *
-	 * @param width page width
-	 * @param height page height
-	 * @param marginsTop page margins top
-	 * @param marginsLeft page margins left
-	 * @param marginsRight page margins right
-	 * @param marginsBottom page margins bottom
-	 * @param numberOfColumns number of automaticTextFrames columns
-	 * @param distanceOfColumns distance between automaticTextFrams columns
-	 * @param automaticTextFrames is automaticTextFrames enabled ?
-	 * @param pageLayout index of the page layout in ScribusDoc.pageSets
+	 * \param width page width
+	 * \param height page height
+	 * \param marginsTop page margins top
+	 * \param marginsLeft page margins left
+	 * \param marginsRight page margins right
+	 * \param marginsBottom page margins bottom
+	 * \param numberOfColumns number of automaticTextFrames columns
+	 * \param distanceOfColumns distance between automaticTextFrams columns
+	 * \param automaticTextFrames is automaticTextFrames enabled ?
+	 * \param pageLayout index of the page layout in ScribusDoc.pageSets
 	 */
 	void setPage(double width, double height, double marginsTop, double marginsLeft, double marginsRight, double marginsBottom, double numberOfColums, double distanceOfColumns, bool automatictTextFrames, int pageLayout);
 	/*!
 	 * \brief Reset the page properties.
 	 *
-	 * @param newMargins margins to apply
-	 * @param pageLayout index of the page layout in Scribus.pageSets
+	 * \param newMargins margins to apply
+	 * \param pageLayout index of the page layout in Scribus.pageSets
 	 */
 	void resetPage(MarginStruct& newMargins, int pageLayout);
 	/*!
 	 * \brief Apply a master page.
 	 *
-	 * @param masterPageName name of the master page
-	 * @param pageNumber index of the page
+	 * \param masterPageName name of the master page
+	 * \param pageNumber index of the page
 	 */
 	bool applyMasterPage(const QString& masterPageName, const int pageNumber);
 	/*!
 	 * \brief Copies a normal page to be a master pages.
 	 *
-	 * @param pageNumber index of the page to copy
-	 * @param leftPage
-         * @param maxLeftPage
-	 * @param masterPageName name for the master page
-	 * @param copyFromAppliedMaster
+	 * \param pageNumber index of the page to copy
+	 * \param leftPage
+         * \param maxLeftPage
+	 * \param masterPageName name for the master page
+	 * \param copyFromAppliedMaster
 	 */
 	bool copyPageToMasterPage(const int pageNumber, const int leftPage, const int maxLeftPage, const QString& masterPageName, bool copyFromAppliedMaster);
 
 	/*!
 	 * \brief Add the automatic text frame to the page.
 	 *
-	 * @param pageNumber index of page
-	 * @return number of text frame created, -1 on error
+	 * \param pageNumber index of page
+	 * \return number of text frame created, -1 on error
 	 */
 	int addAutomaticTextFrame(const int pageNumber);
 
@@ -419,18 +419,18 @@ public:
 	 * \brief Set the page margins.
 	 *
 	 * Current code uses current page only, also provide a (currently, TODO) option for this.
-	 * @param initialTop
-	 * @param initialBottom
-	 * @param initialLeft
-	 * @param initialRight
-	 * @param initialHeight
-	 * @param initialWight
-	 * @param height
-	 * @param width
-	 * @param orientation
-	 * @param pageSize
-	 * @param pageNumber if equal to -1, do nothing and return false. Caution default is -1.
-	 * @param pageType see Page.LeftPg, default to 0 (Right page)
+	 * \param initialTop
+	 * \param initialBottom
+	 * \param initialLeft
+	 * \param initialRight
+	 * \param initialHeight
+	 * \param initialWight
+	 * \param height
+	 * \param width
+	 * \param orientation
+	 * \param pageSize
+	 * \param pageNumber if equal to -1, do nothing and return false. Caution default is -1.
+	 * \param pageType see Page.LeftPg, default to 0 (Right page)
 	 */
 //ivro: is this fuction name goods as it does things that not only about margins ?
 	bool changePageMargins(const double initialTop, const double initialBottom, const double initialLeft, const double initialRight, const double initialHeight, const double initialWidth, const double height, const double width, const int orientation, const QString& pageSize, const int pageNumber=-1, const int pageType = 0);
@@ -438,16 +438,16 @@ public:
 	/*!
 	 * \brief Get page's bleeds.
 	 *
-	 * @param pageNumber index of the page
-	 * @param bleedData struct to get the bleed
+	 * \param pageNumber index of the page
+	 * \param bleedData struct to get the bleed
 	 */
 //ivro: is this not better in Page ?
 	void getBleeds(int pageNumber, MarginStruct& bleedData);
 	/*!
 	 * \brief Get page's bleeds.
 	 *
-	 * @param page page to look at
-	 * @param bleedData struct to get the bleed
+	 * \param page page to look at
+	 * \param bleedData struct to get the bleed
 	 */
 	void getBleeds(Page* page, MarginStruct& bleedData);
 
@@ -458,15 +458,15 @@ public:
 	 * \brief Get the location of the page on the canvas, ie, left, middle, or right.
 	 *
 	 * Does not give information about middle left, etc.
-	 * @param pageIndex Index of page to find location for
-	 * @return LeftPage, MiddlePage, RightPage, enum from pagestructs.h
+	 * \param pageIndex Index of page to find location for
+	 * \return LeftPage, MiddlePage, RightPage, enum from pagestructs.h
 	 */
 	PageLocation locationOfPage(int pageIndex) const;
 	/*!
 	 * \brief Get the column of the page on the canvas, ie, left, middle, or right.
 	 *
-	 * @param pageIndex Index of page to find location for
-	 * @return int of 0,1,2,3
+	 * \param pageIndex Index of page to find location for
+	 * \return int of 0,1,2,3
 	 */
 	int columnOfPage(int pageIndex) const;
 	/*!
@@ -486,12 +486,12 @@ public:
 	/*!
 	 * \brief Set the left and right margins based on the location of the page.
 	 *
-	 * @param pageIndex index of the page
+	 * \param pageIndex index of the page
 	 */
 	void setLocationBasedPageLRMargins(uint pageIndex);
 //@} // End of Page group
 
-/*! @name Layer
+/*! \name Layer
  * \brief Layer related functions.
  */ //@{
 	// Add, delete and move layers
@@ -499,25 +499,25 @@ public:
 	/*!
 	 * \brief Add a layer to the current document.
 	 *
-	 * @param layerName name of layer
-	 * @param activate the layer active
-	 * @return Number of the layer created
+	 * \param layerName name of layer
+	 * \param activate the layer active
+	 * \return Number of the layer created
 	 */
 	int addLayer(const QString& layerName=QString::null, const bool activate=false);
 	/*!
 	 * \brief Copies a layer from the current document.
 	 *
-	 * @param layerNumberToCopy source layer
-	 * @param whereToInsert target layer
-	 * @return Success or failure
+	 * \param layerNumberToCopy source layer
+	 * \param whereToInsert target layer
+	 * \return Success or failure
 	 */
 	void copyLayer(int layerNumberToCopy, int whereToInsert);
 	/*!
 	 * \brief Delete a layer from the current document.
 	 *
-	 * @param layerNumber of layer
-	 * @param deleteItems the items on the layer too?
-	 * @return Success or failure
+	 * \param layerNumber of layer
+	 * \param deleteItems the items on the layer too?
+	 * \return Success or failure
 	 */
 	bool deleteLayer(const int layerNumber, const bool deleteItems);
 	/*!
@@ -530,27 +530,27 @@ public:
 	/*!
 	 * \brief Set the active layer via the layer number.
 	 *
-	 * @param layerToActivate Number of the layer
-	 * @return Success or failure
+	 * \param layerToActivate Number of the layer
+	 * \return Success or failure
 	 */
 	bool setActiveLayer(const int layerToActivate);
 	/*!
 	 * \brief Set the active layer via the layer name.
 	 *
-	 * @param layerNameToActivate Name of the layer
-	 * @return Success or failure
+	 * \param layerNameToActivate Name of the layer
+	 * \return Success or failure
 	 */
 	bool setActiveLayer(const QString & layerNameToActivate);
 	/*!
 	 * \brief Return the number of the current layer.
 	 *
-	 * @return Active layer number
+	 * \return Active layer number
 	 */
 	int activeLayer();
 	/*!
 	 * \brief Return the name of the current layer.
 	 *
-	 * @return Name of the layer
+	 * \return Name of the layer
 	 */
 	const QString& activeLayerName();
 
@@ -559,121 +559,121 @@ public:
 	/*!
 	 * \brief Return the layer name.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Name of the layer
+	 * \param layerNumber Number of the layer
+	 * \return Name of the layer
 	 */
 	QString layerName(const int layerNumber) const;
 	/*!
 	 * \brief Change the name of a layer.
 	 *
-	 * @param layerNumber number of the layer
-	 * @param newName new name of the layer
-	 * @return Success or failure
+	 * \param layerNumber number of the layer
+	 * \param newName new name of the layer
+	 * \return Success or failure
 	 */
 	bool changeLayerName(const int layerNumber, const QString& newName);
 	/*!
 	 * \brief Set the layer printable via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param isPrintable bool true = layer is prantable
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param isPrintable bool true = layer is prantable
+	 * \return Success or failure
 	 */
 	bool setLayerPrintable(const int layerNumber, const bool isPrintable);
 	/*!
 	 * \brief Is the layer printable ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Printable or not
+	 * \param layerNumber Number of the layer
+	 * \return Printable or not
 	 */
 	bool layerPrintable(const int layerNumber);
 	/*!
 	 * \brief Set the layer visible via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param isViewable true = layer is visible
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param isViewable true = layer is visible
+	 * \return Success or failure
 	 */
 	bool setLayerVisible(const int layerNumber, const bool isViewable);
 	/*!
 	 * \brief Is the layer visible ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Visible or not
+	 * \param layerNumber Number of the layer
+	 * \return Visible or not
 	 */
 	bool layerVisible(const int layerNumber);
 	/*!
 	 * \brief Set the layer locked via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param isLocked true = layer is locked
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param isLocked true = layer is locked
+	 * \return Success or failure
 	 */
 	bool setLayerLocked(const int layerNumber, const bool isLocked);
 	/*!
 	 * \brief Is the layer locked ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Locked or not
+	 * \param layerNumber Number of the layer
+	 * \return Locked or not
 	 */
 	bool layerLocked(const int layerNumber);
 	/*!
 	 * \brief Set the layer flow via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param flow true = Text flows around objects on this layer
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param flow true = Text flows around objects on this layer
+	 * \return Success or failure
 	 */
 	bool setLayerFlow(const int layerNumber, const bool flow);
 	/*!
 	 * \brief Does text flow around objects on this layer ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return flow or not
+	 * \param layerNumber Number of the layer
+	 * \return flow or not
 	 */
 	bool layerFlow(const int layerNumber);
 	/*!
 	 * \brief Set the layer transparency via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param trans transparency value 0.0 - 1.0
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param trans transparency value 0.0 - 1.0
+	 * \return Success or failure
 	 */
 	bool setLayerTransparency(const int layerNumber, double trans);
 	/*!
 	 * \brief Returns the layer transparency.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return transparency value 0.0 - 1.0
+	 * \param layerNumber Number of the layer
+	 * \return transparency value 0.0 - 1.0
 	 */
 	double layerTransparency(const int layerNumber);
 	/*!
 	 * \brief Set the layer layerBlendMode via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param blend layerBlendMode
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param blend layerBlendMode
+	 * \return Success or failure
 	 */
 	bool setLayerBlendMode(const int layerNumber, int blend);
 	/*!
 	 * \brief Returns the layer BlendMode.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return layerBlendMode
+	 * \param layerNumber Number of the layer
+	 * \return layerBlendMode
 	 */
 	int layerBlendMode(const int layerNumber);
 	/*!
 	 * \brief Set the layer outline mode via the layer number.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param outline true = layer is displayed in outlines only
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param outline true = layer is displayed in outlines only
+	 * \return Success or failure
 	 */
 	bool setLayerOutline(const int layerNumber, const bool outline);
 	/*!
 	 * \brief Is this layer in outline mode ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return outline or not
+	 * \param layerNumber Number of the layer
+	 * \return outline or not
 	 */
 	bool layerOutline(const int layerNumber);
 
@@ -682,16 +682,16 @@ public:
 	/*!
 	 * \brief Set the layer marker color.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @param color color of the marker
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \param color color of the marker
+	 * \return Success or failure
 	 */
 	bool setLayerMarker(const int layerNumber, QColor color);
 	/*!
 	 * \brief Returns the layer marker color.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return marker color
+	 * \param layerNumber Number of the layer
+	 * \return marker color
 	 */
 	QColor layerMarker(const int layerNumber);
 
@@ -700,15 +700,15 @@ public:
 	/*!
 	 * \brief Returns the level of the requested layer.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Level of the layer
+	 * \param layerNumber Number of the layer
+	 * \return Level of the layer
 	 */
 	int layerLevelFromNumber(const int layerNumber);
 	/*!
 	 * \brief Returns the number of the layer at a certain level.
 	 *
-	 * @param layerLevel Layer level
-	 * @return Layer number
+	 * \param layerLevel Layer level
+	 * \return Layer number
 	 */
 	int layerNumberFromLevel(const int layerLevel);
 
@@ -717,29 +717,29 @@ public:
 	/*!
 	 * \brief Lowers a layer.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \return Success or failure
 	 */
 	bool lowerLayer(const int layerNumber);
 	/*!
 	 * \brief Lowers a layer using the level.
 	 *
-	 * @param layerLevel Level of the layer
-	 * @return Success or failure
+	 * \param layerLevel Level of the layer
+	 * \return Success or failure
 	 */
 	bool lowerLayerByLevel(const int layerLevel);
 	/*!
 	 * \brief Raises a layer.
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Success or failure
+	 * \param layerNumber Number of the layer
+	 * \return Success or failure
 	 */
 	bool raiseLayer(const int layerNumber);
 	/*!
 	 * \brief Raises a layer using the level.
 	 *
-	 * @param layerLevel Level of the layer
-	 * @return Success or failure
+	 * \param layerLevel Level of the layer
+	 * \return Success or failure
 	 */
 	bool raiseLayerByLevel(const int layerLevel);
 
@@ -748,34 +748,34 @@ public:
 	/*!
 	 * \brief Returns the layer count.
 	 *
-	 * @return Number of layers in doc
+	 * \return Number of layers in doc
 	 */
 	int layerCount() const;
 	/*!
 	 * \brief Does the layer have items on it ?
 	 *
-	 * @param layerNumber Number of the layer
-	 * @return Layer contains items bool
+	 * \param layerNumber Number of the layer
+	 * \return Layer contains items bool
 	 */
 	bool layerContainsItems(const int layerNumber);
 	/*!
 	 * \brief Renumbers a layer.
 	 *
 	 * Used in particular for reinsertion for undo/redo.
-	 * @param layerNumber old layer number
-	 * @param newLayerNumber New layer number
-	 * @return Success or failure
+	 * \param layerNumber old layer number
+	 * \param newLayerNumber New layer number
+	 * \return Success or failure
 	 */
 	bool renumberLayer(const int layerNumber, const int newLayerNumber);
 	/*!
 	 * \brief Returns a list of the layers in their order.
 	 *
-	 * @param list QStringList to insert the layer names into
+	 * \param list QStringList to insert the layer names into
 	 */
 	void orderedLayerList(QStringList* list);
 //@} // End of Layer function
 
-/*! @name Item
+/*! \name Item
  * \brief Item related functions.
  */ //@{
 	// Add
@@ -786,17 +786,17 @@ public:
 	 * A simple function to create an item of a defined type and add it to the document
 	 * Will need extensive rewriting once we have various classes of PageItems, at a guess.
 	 *
-	 * @param itemType type
-	 * @param frameType frame type
-	 * @param x X pos
-	 * @param y Y pos
-	 * @param b width
-	 * @param h height
-	 * @param w ?
-	 * @param fill fill color name
-	 * @param outline outline color name
-	 * @param itemFinalised Used to handle item creation for undo while the user is still dragging.
-	 * @return Number of created item, -1 on failure.
+	 * \param itemType type
+	 * \param frameType frame type
+	 * \param x X pos
+	 * \param y Y pos
+	 * \param b width
+	 * \param h height
+	 * \param w ?
+	 * \param fill fill color name
+	 * \param outline outline color name
+	 * \param itemFinalised Used to handle item creation for undo while the user is still dragging.
+	 * \return Number of created item, -1 on failure.
 	 */
 	int itemAdd(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double b, const double h, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
 	/*!
@@ -804,22 +804,22 @@ public:
 	 *
 	 * Item will be fitted to the closest guides/margins of the x/y position.
 	 *
-	 * @param itemType type
-	 * @param itemFramType frame type
-	 * @param x X pos
-	 * @param y Y pos
-	 * @param w ?
-	 * @param fill fill color name
-	 * @param outline outline color name
-	 * @param itemFinalised Used to handle item creation for undo while the user is still dragging
-	 * @return Number of created item, -1 on failure.
+	 * \param itemType type
+	 * \param itemFramType frame type
+	 * \param x X pos
+	 * \param y Y pos
+	 * \param w ?
+	 * \param fill fill color name
+	 * \param outline outline color name
+	 * \param itemFinalised Used to handle item creation for undo while the user is still dragging
+	 * \return Number of created item, -1 on failure.
 	 */
 	int itemAddArea(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const double x, const double y, const double w, const QString& fill, const QString& outline, const bool itemFinalised);
 	/*!
 	 * \brief Allow the user to create a frame easily with some simple placement and sizing options.
 	 *
-	 * @param iafData a InsertAFrameData structure with params
-	 * @return int item id? FIXME
+	 * \param iafData a InsertAFrameData structure with params
+	 * \return int item id? FIXME
 	 */
 	int itemAddUserFrame(InsertAFrameData &iafData);
 	/*!
@@ -827,7 +827,7 @@ public:
 	 *
 	 * Only called from ScribusView. Note the undo target is the page, so the undo code remains their for now.
 	 *
-	 * @return If an item was committed and the view must emit its signal, which needs removing from here, TODO.
+	 * \return If an item was committed and the view must emit its signal, which needs removing from here, TODO.
 	 */
 	bool itemAddCommit(const int itemNumber);
 	/*!
@@ -835,17 +835,17 @@ public:
 	 *
 	 * Simply split off code from itemAdd.
 	 *
-	 * @param itemType type
-	 * @param frameType frame type
-	 * @param itemNumber item index
+	 * \param itemType type
+	 * \param frameType frame type
+	 * \param itemNumber item index
 	 */
 	void itemAddDetails(const PageItem::ItemType itemType, const PageItem::ItemFrameType frameType, const int itemNumber);
 	/*!
 	 * \brief Item type conversion functions.
 	 *
-	 * @param currItem item to convert
-	 * @param newType
-	 * @param secondaryItem ?
+	 * \param currItem item to convert
+	 * \param newType
+	 * \param secondaryItem ?
 	 */
 	PageItem* convertItemTo(PageItem *currItem, PageItem::ItemType newType, PageItem* secondaryItem=NULL);
 	/*!
@@ -866,10 +866,10 @@ public:
 	/*!
 	 * \brief Move item.
 	 *
-	 * @param newX new X coord
-	 * @param newY new Y coord
-	 * @param item page item to move
-	 * @param fromMP ?
+	 * \param newX new X coord
+	 * \param newY new Y coord
+	 * \param item page item to move
+	 * \param fromMP ?
 	 */
 //ivro: standardize param order as PageItem changed each function ?
 //	something like item, args, options ?
@@ -877,55 +877,55 @@ public:
 	/*!
 	 * \brief Rotate Item.
 	 *
-	 * @param angle angle to rotate
-	 * @param itemNumber index of the item to rotate
+	 * \param angle angle to rotate
+	 * \param itemNumber index of the item to rotate
 	 */
 	void RotateItem(double angle, int itemNumber);
 	/*!
 	 * \brief Rotate Item.
 	 *
-	 * @param angle angle to rotate
-	 * @param currItem page item to rotate
+	 * \param angle angle to rotate
+	 * \param currItem page item to rotate
 	 */
 	void RotateItem(double angle, PageItem *currItem);
 	/*!
 	 * \brief Move and Rotate Item.
 	 *
-	 * @param currItem page item to transform
-	 * @param npv ?
-	 * @param fromMP ?
+	 * \param currItem page item to transform
+	 * \param npv ?
+	 * \param fromMP ?
 	 */
 	void MoveRotated(PageItem *currItem, FPoint npv, bool fromMP = false);
 	/*!
 	 * \brief Resize item.
 	 *
-	 * @param newX new X coord
-	 * @param newY new Y coord
-	 * @param ite index of page item to resize
-	 * @param fromMp ?
-	 * @param DoUpdateClip ?
-	 * @param redraw ?
+	 * \param newX new X coord
+	 * \param newY new Y coord
+	 * \param ite index of page item to resize
+	 * \param fromMp ?
+	 * \param DoUpdateClip ?
+	 * \param redraw ?
 	 */
 	bool SizeItem(double newX, double newY, int ite, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
 	/*!
 	 * \brief Resize item.
 	 *
-	 * @param newX new X coord
-	 * @param newY new Y coord
-	 * @param pi page item to resize
-	 * @param fromMp ?
-	 * @param DoUpdateClip ?
-	 * @param redraw ?
+	 * \param newX new X coord
+	 * \param newY new Y coord
+	 * \param pi page item to resize
+	 * \param fromMp ?
+	 * \param DoUpdateClip ?
+	 * \param redraw ?
 	 */
 	bool SizeItem(double newX, double newY, PageItem *pi, bool fromMP = false, bool DoUpdateClip = true, bool redraw = true);
 	/*!
 	 * \brief Size and Move item.
 	 *
-	 * @param newX new X coord
-	 * @param newY new Y coord
-	 * @param ite index of page item to transform
-	 * @param fromMp ?
-	 * @param constrainRotation ?
+	 * \param newX new X coord
+	 * \param newY new Y coord
+	 * \param ite index of page item to transform
+	 * \param fromMp ?
+	 * \param constrainRotation ?
 	 */
 	bool MoveSizeItem(FPoint newX, FPoint newY, int ite, bool fromMP = false, bool constrainRotation=false);
 //ivro: don't know what it does
@@ -947,8 +947,8 @@ public:
 	/*!
 	 * \brief Get the item index from a unique ID.
 	 *
-	 * @param unique ID of item
-	 * @return index of the item
+	 * \param unique ID of item
+	 * \return index of the item
 	 */
 	uint getItemNrfromUniqueID(uint unique);
 	/*!
@@ -977,7 +977,7 @@ public:
 	 *
 	 * Return true if the passed name is not used by any existing PageItem
 	 *        in the same document as this PageItem.
-	 * @author Craig Ringer
+	 * \author Craig Ringer
 	 ** CB Moved from PageItem
 	 */
 //ivro: is returning true if the passed name exists not better ? (or rename to itemNameDontUses ?)
@@ -993,7 +993,7 @@ public:
 	QMap<PageItem*, QString> getDocItemNames(PageItem::ItemType itemType);
 //@} //End Items group
 
-/*! @name Sections
+/*! \name Sections
  * \brief Sections related functions
  */ //@{
 	// add, delete, use sections
@@ -1027,14 +1027,14 @@ public:
 	void updateSectionPageNumbersToPages();
 	/*!
 	 *
-	 * @param otherPageIndex
-	 * @param location
-	 * @param count
+	 * \param otherPageIndex
+	 * \param location
+	 * \param count
 	 */
 	void addPageToSection(const uint otherPageIndex, const uint location, const uint count=1);
 	/*!
 	 *
-	 * @param pageIndex
+	 * \param pageIndex
 	 */
 	void removePageFromSection(const uint pageIndex);
 	/*!
@@ -1043,7 +1043,7 @@ public:
 	void setFirstSectionFromFirstPageNumber();
 //@} // End of Sections group
 
-/*! @name Align
+/*! \name Align
  * Align related functions
  */ //@{
 	void buildAlignItemList(Selection* customSelection=0);
@@ -1051,7 +1051,7 @@ public:
 	void endAlign();
 //@} // End of align functions
 
-/*! @name Styles
+/*! \name Styles
  * Style related functions
  */ //@{
 	// Paragraphe style
@@ -1073,14 +1073,14 @@ public:
 	 * \brief Remove any reference to old styles and replace with new name.
 	 *
 	 * This needs to be called when a style was removed. New name may be "".
-	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
+	 * \param newNameForOld a map which maps the name of any style to remove to a new stylename
 	 */
 //ivro: rename replaceParaStyles ?
 	void replaceStyles(const QMap<QString,QString>& newNameForOld);
 	/*!
 	 * \brief Is the default paragraph style ?
 	 *
-	 * @param p paragraph style to test
+	 * \param p paragraph style to test
 	 */
 //ivro: is this must be with the one for char style ?
 	bool isDefaultStyle( const ParagraphStyle& p ) const { return docParagraphStyles.isDefault(p); }
@@ -1090,7 +1090,7 @@ public:
 	/*!
 	 * \brief Get a character style by name.
 	 *
-	 * @param name char style name
+	 * \param name char style name
 	 */
 	const CharStyle& charStyle(QString name) { return docCharStyles.get(name); }
 	/*!
@@ -1100,21 +1100,21 @@ public:
 	/*!
 	 * \brief Redefine Character styles.
 	 *
-	 * @param newStyle character styles
-	 * @param removeUnused
+	 * \param newStyle character styles
+	 * \param removeUnused
 	 */
 	void redefineCharStyles(const StyleSet<CharStyle>& newStyles, bool removeUnused=false);
 	/*!
 	 * \brief Remove any reference to old styles and replace with new name.
 	 *
 	 * This needs to be called when a style was removed. New name may be "".
-	 * @param newNameForOld a map which maps the name of any style to remove to a new stylename
+	 * \param newNameForOld a map which maps the name of any style to remove to a new stylename
 	 */
 	void replaceCharStyles(const QMap<QString,QString>& newNameForOld);
 	/*!
 	 * \brief Is the default character style ?
 	 *
-	 * @param c character style to test
+	 * \param c character style to test
 	 */
 	bool isDefaultStyle( const CharStyle& c ) const { return docCharStyles.isDefault(c); }
 // 	bool isDefaultStyle( LineStyle& l ) const { return MLineStyles......; }
@@ -1124,23 +1124,23 @@ public:
 	/*!
 	 * \brief Insert styles from another document in this document.
 	 *
-	 * @param fileName The path of the document we want to extract its styles
+	 * \param fileName The path of the document we want to extract its styles
 	 */
 	void loadStylesFromFile(QString fileName);
 	/*!
 	 * \brief Gather styles from another document.
 	 *
-	 * @param fileName The path of the document we want to extract its styles
-	 * @param tempStyles A pointer to a StyleSet which will be filled by paragraph styles
-	 * @param tempCharStyles A pointer to a StyleSet which will be filled by character styles
-	 * @param tempLineStyles A map which will be filled by line styles
+	 * \param fileName The path of the document we want to extract its styles
+	 * \param tempStyles A pointer to a StyleSet which will be filled by paragraph styles
+	 * \param tempCharStyles A pointer to a StyleSet which will be filled by character styles
+	 * \param tempLineStyles A map which will be filled by line styles
 	 */
 	void loadStylesFromFile(QString fileName, StyleSet<ParagraphStyle> *tempStyles,
 	                                          StyleSet<CharStyle> *tempCharStyles,
 	                                          QMap<QString, multiLine> *tempLineStyles);
 //@} // End of style group
 
-/*! @name Color Management
+/*! \name Color Management
  * \brief Color Management related functions.
  */ //@{
 	/*!
@@ -1153,7 +1153,7 @@ public:
 	/*!
 	 * \brief Switch Colormanagement on or of.
 	 *
-	 * @param enable bool, if true Colormanagement is switched on, else off
+	 * \param enable bool, if true Colormanagement is switched on, else off
 	 */
 	void enableCMS(bool enable);
 	/*!
@@ -1166,11 +1166,11 @@ public:
 	/*!
 	 * \brief Insert a color into the documents color list.
 	 *
-	 * @param colorList Name of the color list
-	 * @param cyan Cyan component
-	 * @param magenta Magenta component
-	 * @param yellow Yellow component
-	 * @param black Black component
+	 * \param colorList Name of the color list
+	 * \param cyan Cyan component
+	 * \param magenta Magenta component
+	 * \param yellow Yellow component
+	 * \param black Black component
 	 */
 	void insertColor(QString colorList, double cryan, double magenta, double yellow, double black);
 	/*!
@@ -1187,7 +1187,7 @@ public:
 	bool lineStylesUseColor(const QString& colorName);
 //@} // End of color functions
 
-/*! @name Font
+/*! \name Font
  * \brief Font related funtions.
  */ //@{
 	/*!
@@ -1206,7 +1206,7 @@ public:
 	void checkItemForFonts(PageItem *it, QMap<QString, QMap<uint, FPointArray> > & Really, uint lc);
 //@} // End of font functions
 
-/*! @name Patterns
+/*! \name Patterns
  * \brief Pattern related functions.
  */ //@{
 	/*!
@@ -1222,7 +1222,7 @@ public:
 	QStringList getUsedPatternsHelper(QString pattern, QStringList &results);
 //@} // End of patterns functions
 
-/*! @name Item selection
+/*! \name Item selection
  * \brief Item selection related functions.
  *
  * Item selection is used to modify items.
@@ -1347,7 +1347,7 @@ public slots:
 
 public:
 
-/*! @name Various functions
+/*! \name Various functions
  */ //@{
 
 	/*!
@@ -1363,7 +1363,7 @@ public:
 	 * \brief Create the requested pages in a new document.
 	 *
 	 * Run after ScribusDoc.createDefaultMasterPages()
-	 * @param pageCount number of page to create
+	 * \param pageCount number of page to create
 	 */
 	void createNewDocPages(int pageCount);
 
@@ -1382,9 +1382,9 @@ public:
 	/*!
 	 * \brief Method used when an undo/redo is requested.
 	 *
-	 * @param state State describing the action that is wanted to be undone/redone
-	 * @param isUndo If true undo is wanted else if false redo.
-	 * @author Riku Leino
+	 * \param state State describing the action that is wanted to be undone/redone
+	 * \param isUndo If true undo is wanted else if false redo.
+	 * \author Riku Leino
 	 */
 	void restore(UndoState* state, bool isUndo);
 	/*!
@@ -1405,29 +1405,29 @@ public:
 	/*!
 	 * \brief Load images into an image frame, moved from the view.
 	 *
-	 * @param fn image file name
-	 * @param ItNr page item number
-	 * @param reload
-	 * @param showMsg
-	 * @return Return false on failure
+	 * \param fn image file name
+	 * \param ItNr page item number
+	 * \param reload
+	 * \param showMsg
+	 * \return Return false on failure
 	 */
 	bool LoadPict(QString fn, int ItNr, bool reload = false, bool showMsg = false);
 	/*!
 	 * \brief Load images into an image frame.
 	 *
-	 * @param fn image file name
-	 * @param pageItem page item
-	 * @param reload
-	 * @param showMsg
-	 * @return Return false on failure
+	 * \param fn image file name
+	 * \param pageItem page item
+	 * \param reload
+	 * \param showMsg
+	 * \return Return false on failure
 	 */
 	bool loadPict(QString fn, PageItem *pageItem, bool reload = false, bool showMsg = false);
 	/*!
 	 * \brief Handle image with color profiles.
 	 *
-	 * @param Pr profile
-	 * @param PrCMYK cmyk profile
-	 * @param dia optional progress widget
+	 * \param Pr profile
+	 * \param PrCMYK cmyk profile
+	 * \param dia optional progress widget
 	 */
 	void RecalcPictures(ProfilesL *Pr, ProfilesL *PrCMYK, QProgressBar *dia = 0);
 public slots:
@@ -1451,8 +1451,8 @@ public:
 	/*!
 	 * \brief Find the minX,MinY and maxX,maxY for the canvas required for the doc.
 	 *
-	 * @param minPoint
-	 * @param maxPoint
+	 * \param minPoint
+	 * \param maxPoint
 	 */
 	void canvasMinMax(FPoint& minPoint, FPoint& maxPoint);
 
@@ -1462,9 +1462,9 @@ public:
 	 * In masterPage mode return the current master page index if the point exists on the current master page,
 	 * In normal mode return the first page index where this point exists.
 	 *
-	 * @param x X coord of the point
-	 * @param y Y coord of the point
-	 * @return page index or -1
+	 * \param x X coord of the point
+	 * \param y Y coord of the point
+	 * \return page index or -1
 	 */
 	int OnPage(double x, double  y);
 	/*!
@@ -1473,8 +1473,8 @@ public:
 	 * In masterPageMode return the current master page index if the item exists on the current master page.
 	 * In mormal mode return the page index where this item exists.
 	 *
-	 * @param item item we looking for
-	 * @return page index or -1
+	 * \param item item we looking for
+	 * \return page index or -1
 	 */
 	int OnPage(PageItem *item);
 
