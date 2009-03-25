@@ -61,14 +61,14 @@ public:
 	void setInitialWidth(const double);
 	void setInitialHeight(const double);
 	void copySizingProperties(Page *sourcePage, const MarginStruct& pageMargins);
-	MarginStruct Margins;		/*!< Page's margins. */
-	MarginStruct initialMargins;	/*!< Initial page's margins. */
+	MarginStruct Margins;		/*!< \brief Page's margins. */
+	MarginStruct initialMargins;	/*!< \brief Initial page's margins. */
   /** Nummer der Seite */
 	int LeftPg;
-	QString MPageNam;		/*!< Name of the used master page. */
+	QString MPageNam;		/*!< \brief Name of the used master page. */
 
 	QString m_pageSize;
-	int PageOri;			/*!< Page's orientation. O => Portrait, 1 => Landscape. */
+	int PageOri;			/*!< \brief Page's orientation. \details O => Portrait, 1 => Landscape. */
 	int marginPreset;
 	ScribusDoc* doc() const { return m_Doc; }
 	void setDocument(ScribusDoc* doc);
@@ -76,18 +76,26 @@ public:
 	void setPageNr(int pageNr);
 	const QString& pageSectionNumber() const { return m_pageSectionNumber; }
 	void setPageSectionNumber(const QString&);
-	//! Return the page's name
+	/*!
+	 * \brief Return the page's name.
+	 */
 	const QString& pageName() const {return m_PageName;};
 	void setPageName(const QString& newName);
 	void restore(UndoState* state, bool isUndo);
 
-	/*! \brief As a bit of a dirty hack, we declare this mutable so it can be altered
-	even while the object is `const'. That's normally only for internal
-	implementation, but in this case it at least lets us guarantee the rest
-	of the object is unchanged in (eg) pdflib. This should be replaced with
-	proper access methods later. */
+	/*!
+	 * \brief The page item we get from master page.
+	 *
+	 * As a bit of a dirty hack, we declare this mutable so it can be altered
+	 * even while the object is `const'. That's normally only for internal
+	 * implementation, but in this case it at least lets us guarantee the rest
+	 * of the object is unchanged in (eg) pdflib. This should be replaced with
+	 * proper access methods later.
+	 */
 	mutable QList<PageItem*> FromMaster;
-	//! \brief Guides lists and basic operations
+	/*!
+	 * \brief Guides lists and basic operations.
+	 */
 	GuideManagerCore guides;
 
 protected:
@@ -96,15 +104,15 @@ protected:
 	void restorePageItemDeletion(ItemState<PageItem*> *state, bool isUndo);
 	void restorePageItemConversion(ItemState<std::pair<PageItem*, PageItem*> >*state, bool isUndo);
 	
-	double m_xOffset;		/*!< Page's X Offset. */
-	double m_yOffset;		/*!< Page's Y Offset. */
-	double m_width;			/*!< Page's width. */
-	double m_height;		/*!< Page's height. */
-	double m_initialWidth;		/*!< Initial page's width. */
-	double m_initialHeight;		/*!< Initial page's height. */
-	int m_pageNr;			/*!< Page's number. */
-	QString m_PageName;		/*!< Page's name. Currently only allowed to be used by a master page. */
-	ScribusDoc* m_Doc;		/*!< The document this page belongs to. */
+	double m_xOffset;		/*!< \brief Page's X Offset. */
+	double m_yOffset;		/*!< \brief Page's Y Offset. */
+	double m_width;			/*!< \brief Page's width. */
+	double m_height;		/*!< \brief Page's height. */
+	double m_initialWidth;		/*!< \brief Initial page's width. */
+	double m_initialHeight;		/*!< \brief Initial page's height. */
+	int m_pageNr;			/*!< \brief Page's number. */
+	QString m_PageName;		/*!< \brief Page's name. \details Currently only allowed to be used by a master page. */
+	ScribusDoc* m_Doc;		/*!< \brief The document this page belongs to. */
 	QString m_pageSectionNumber;
 };
 
