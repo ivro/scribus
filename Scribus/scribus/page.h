@@ -46,20 +46,75 @@ class ScribusDoc;
 class SCRIBUS_API Page : public UndoObject, public SingleObservable<Page>
 {
 public:
+	/*!
+	 * \brief Create a new page.
+	 *
+	 * \param x page's X offset
+	 * \param y page's Y offset
+	 * \param b page's widht
+	 * \param h page's height
+	 */
 	Page(const double x, const double y, const double b, const double h);
+	/*!
+	 * \brief Destroy a page.
+	 */
 	~Page();
+
+	/*!
+	 * \brief Get the page's X offset.
+	 */
 	double xOffset() const { return m_xOffset; }
+	/*!
+	 * \brief Get the page's Y offset.
+	 */
 	double yOffset() const { return m_yOffset; }
+	/*!
+	 * \brief Get the page's width.
+	 */
 	double width() const { return m_width; }
+	/*!
+	 * \brief Get the page's height.
+	 */
 	double height() const { return m_height; }
+	/*!
+	 * \brief Get the initial page's width.
+	 */
 	double initialWidth() const { return m_initialWidth; }
+	/*!
+	 * \brief Get the initial page's height.
+	 */
 	double initialHeight() const { return m_initialHeight; }
+	/*!
+	 * \brief Set the page's X offset.
+	 */
 	void setXOffset(const double);
+	/*!
+	 * \brief Set the page's Y offset.
+	 */
 	void setYOffset(const double);
+	/*!
+	 * \brief Set the page's width.
+	 */
 	void setWidth(const double);
+	/*!
+	 * \brief Set the page's height.
+	 */
 	void setHeight(const double);
+	/*!
+	 * \brief Set the initial page's width.
+	 */
 	void setInitialWidth(const double);
+	/*!
+	 * \brief Set the initial page's height.
+	 */
 	void setInitialHeight(const double);
+	/*!
+	 * \brief Copy the size property from page.
+	 *
+	 * For know doesn't take care of layout.
+	 * \param page page to copy the properties
+	 * \param pageMargins margins to apply
+	 */
 	void copySizingProperties(Page *sourcePage, const MarginStruct& pageMargins);
 	MarginStruct Margins;		/*!< \brief Page's margins. */
 	MarginStruct initialMargins;	/*!< \brief Initial page's margins. */
@@ -70,9 +125,21 @@ public:
 	QString m_pageSize;
 	int PageOri;			/*!< \brief Page's orientation. \details O => Portrait, 1 => Landscape. */
 	int marginPreset;
+	/*!
+	 * \brief Get the document this page belongs to.
+	 */
 	ScribusDoc* doc() const { return m_Doc; }
+	/*!
+	 * \brief Set the document this page belongs to.
+	 */
 	void setDocument(ScribusDoc* doc);
+	/*!
+	 * \brief Get the page's number.
+	 */
 	int pageNr() const { return m_pageNr; }
+	/*!
+	 * \brief Set the page's number.
+	 */
 	void setPageNr(int pageNr);
 	const QString& pageSectionNumber() const { return m_pageSectionNumber; }
 	void setPageSectionNumber(const QString&);
@@ -80,7 +147,15 @@ public:
 	 * \brief Return the page's name.
 	 */
 	const QString& pageName() const {return m_PageName;};
+	/*!
+	 * \brief Set the page's name.
+	 *
+	 * Currently only allowed for master page.
+	 */
 	void setPageName(const QString& newName);
+	/*!
+	 * \brief Used for undo/redo actions.
+	 */
 	void restore(UndoState* state, bool isUndo);
 
 	/*!
