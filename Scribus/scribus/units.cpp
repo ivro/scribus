@@ -26,33 +26,33 @@ for which a new license (GPL+exception) is in place.
 /*!
  * \brief Get ratio from unit to points.
  *
- * \param index unit index, see #ScUnit for valid unit index
- * \return 0 if for unvalid unit index,
+ * \param unit see #ScUnit for valid unit
+ * \return 0 if unvalid unit,
  *         1 if for %Points, %Degrees and %Percent unit,
  *         ratio for other unit
  */
-double unitGetRatioFromIndex(const int index)
+double unitGetRatioFromIndex(const int unit)
 {
 	//PT, MM, IN, P, CM, C (Cicero)
 	//NOTE: Calling functions that divide by this value will crash on divide by 0. They shouldnt be getting
-	// a zero value if they are accessing here with a correct index.
-	if (index<UNITMIN || index>UNITMAX)
+	// a zero value if they are accessing here with a correct unit.
+	if (unit<UNITMIN || unit>UNITMAX)
 		return 0;
 	//                  PT,        MM,       IN,   P,             CM,               C,   °,   %
 	double ratio[] = { 1.0, 25.4/72.0, 1.0/72.0, 1.0,      2.54/72.0, 25.4/72.0/4.512, 1.0, 1.0 };
 // 	double ratio[] = { 1.0, 25.4/72.0, 1.0/72.0, 1.0/12.0, 2.54/72.0, 25.4/72.0/4.512, 1.0, 1.0 };
-	return ratio[index];
+	return ratio[unit];
 }
 
 /*!
  * \brief Get unit base.
  *
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return unit base
  */
-int SCRIBUS_API unitGetBaseFromIndex(const int index)
+int SCRIBUS_API unitGetBaseFromIndex(const int unit)
 {
-	if (index==SC_P)
+	if (unit==SC_P)
 		return 12;
 	return 10;
 }
@@ -100,10 +100,10 @@ double unitValueFromString(const QString& value)
 }
 
 /*!
- * \brief Get unit index from string.
+ * \brief Get unit from string.
  *
  * \param value string to consider
- * \return unit index, see #ScUnit for valid unit index
+ * \return unit, see #ScUnit for valid unit
  */
 scUnit unitIndexFromString(const QString& value)
 {
@@ -151,28 +151,28 @@ scUnit unitIndexFromString(const QString& value)
  *
  * GUI suffix have a whitespace prepended.
  * See unitGetStrFromIndex() for general suffix.
- * \param index unit index, see #ScUnit for valid unit index.
+ * \param unit see #ScUnit for valid unit
  * \return a translated GUI suffix
  */
-const QString unitGetSuffixFromIndex(const int index)
+const QString unitGetSuffixFromIndex(const int unit)
 {
-	if (index==SC_P)
+	if (unit==SC_P)
 	{
 		return "";
 	}
-	return QString(" %1").arg(unitGetStrFromIndex(index));
+	return QString(" %1").arg(unitGetStrFromIndex(unit));
 }
 
 /*!
  * \brief Get general suffix for unit.
  *
  * See unitGetSuffixFromIndex() for GUI suffix.
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return a translated general suffix
  */
-const QString unitGetStrFromIndex(const int index)
+const QString unitGetStrFromIndex(const int unit)
 {
-	if (index<UNITMIN || index>UNITMAX) 
+	if (unit<UNITMIN || unit>UNITMAX)
 		return "";
 	QString suffix[] = {
 		QObject::tr("pt"),
@@ -184,51 +184,51 @@ const QString unitGetStrFromIndex(const int index)
 		QObject::tr("\xB0", "degrees, unicode 0xB0"), //degree
 		QObject::tr("%")
 	};
-	return suffix[index];
+	return suffix[unit];
 }
 
 /*!
  * \brief Get unstanslated general suffix for unit
  *
  * See unitGetStrFromIndex() for translated one.
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return an unstranslated general suffix
  */
-const QString unitGetUntranslatedStrFromIndex(const int index)
+const QString unitGetUntranslatedStrFromIndex(const int unit)
 {
-	if (index<UNITMIN || index>UNITMAX) 
+	if (unit<UNITMIN || unit>UNITMAX)
 		return "";
 	QString suffix[] = { "pt", "mm", "in", "p", "cm", "c", "\xB0", "%" };
-	return suffix[index];
+	return suffix[unit];
 }
 /*!
  * \brief Get decimals for unit.
  *
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return decimals
  */
-int unitGetDecimalsFromIndex(const int index)
+int unitGetDecimalsFromIndex(const int unit)
 {
-	if (index<UNITMIN || index>UNITMAX) 
+	if (unit<UNITMIN || unit>UNITMAX)
 		return 0;
 	//                      PT,   MM,    IN,   P,    CM,     C,   °,   %
 	int decimalPoints[] = {100, 1000, 10000, 100, 10000, 10000, 100, 100};
-	return decimalPoints[index];
+	return decimalPoints[unit];
 }
 
 /*!
  * \brief Get precision for unit.
  *
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return number of decimal digit
  */
-int unitGetPrecisionFromIndex(const int index)
+int unitGetPrecisionFromIndex(const int unit)
 {
-	if (index<UNITMIN || index>UNITMAX) 
+	if (unit<UNITMIN || unit>UNITMAX)
 		return 0;
 	//                PT,MM,IN, P,CM, C, °, %
 	int precision[] = {2, 3, 4, 2, 4, 4, 2, 2};
-	return precision[index];
+	return precision[unit];
 }
 
 /*!
@@ -253,9 +253,9 @@ const QStringList unitGetTextUnitList()
 }
 
 /*!
- * Get the maximum unit index allowed.
+ * Get the maximum index allowed for unit.
  *
- * See #ScUnit for valid unit index.
+ * See #ScUnit for valid unit.
  */
 int unitGetMaxIndex()
 {
@@ -376,13 +376,13 @@ double pts2c(double pts)
  * \brief Converts %Points to specified unit
  *
  * \param pts value in %Points
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return value in specified unit
  */
-double pts2value(double pts, int index)
+double pts2value(double pts, int unit)
 {
 	double ret = 0.0;
-	switch (index)
+	switch (unit)
 	{
 		case SC_POINTS:
 		case SC_PICAS:
@@ -391,7 +391,7 @@ double pts2value(double pts, int index)
 			ret = pts; //dont multiply by 1
 			break;
 		default:
-			ret = pts * unitGetRatioFromIndex(index);
+			ret = pts * unitGetRatioFromIndex(unit);
 			break;
 	}
 	return ret;
@@ -400,14 +400,14 @@ double pts2value(double pts, int index)
 /*!
  * \brief Converts specified value in %Points
  *
- * \param value value in index unit
- * \param index unit index, see #ScUnit for valid unit index
+ * \param value value in unit
+ * \param unit see #ScUnit for valid unit
  * \return value in %Points
  */
-double value2pts(double value, int index)
+double value2pts(double value, int unit)
 {
 	double ret = 0.0;
-	switch (index)
+	switch (unit)
 	{
 		case SC_POINTS:
 		case SC_PICAS:
@@ -416,7 +416,7 @@ double value2pts(double value, int index)
 			ret = value; // dont divide by 1
 			break;
 		default: // others
-			ret = value / unitGetRatioFromIndex(index);
+			ret = value / unitGetRatioFromIndex(unit);
 			break;
 	}
 	return ret;
@@ -426,8 +426,8 @@ double value2pts(double value, int index)
  * \brief Converts unit to unit
  *
  * \param value value in fromUnit unit
- * \param fromUnit unit for value, see #ScUnit for valid unit index
- * \param toUnit unit for returning value, see #ScUnit for valid unit
+ * \param fromUnit value unit, see #ScUnit for valid unit
+ * \param toUnit return unit, see #ScUnit for valid unit
  * \return value in toUnit unit
  */
 double value2value(double value, int fromUnit, int toUnit)
@@ -446,55 +446,55 @@ double value2value(double value, int fromUnit, int toUnit)
  * \brief Get a string of value converted in unit.
  *
  * \param pts value in %Points
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \param round has I have to round the converted value to unit precision, see unitGetPrecisionFromIndex() ?
  * \param suffix has I have to append suffix ?
  */
-QString value2String(double pts, int index, bool round, bool suffix)
+QString value2String(double pts, int unit, bool round, bool suffix)
 {
 //ivro: Is toString not better as number see Qt documentation ?
 	QString s;
 	if (round)
-		s=QString::number(pts2value(pts, index), 'f', unitGetPrecisionFromIndex(index));
+		s=QString::number(pts2value(pts, unit), 'f', unitGetPrecisionFromIndex(unit));
 	else
-		s=QString::number(pts2value(pts, index));
+		s=QString::number(pts2value(pts, unit));
 	if (suffix)
-		s += unitGetStrFromIndex(index);
+		s += unitGetStrFromIndex(unit);
 	return s;
 }
 
 /*!
  * \brief Get iteration value 1 for vruler, hruler and tabruler.
  *
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return iteration value
  *
  * \todo Documents use cases
  */
-double unitRulerGetIter1FromIndex(const int index)
+double unitRulerGetIter1FromIndex(const int unit)
 {
-	if (!unitValidForDocUnit(index)) 
+	if (!unitValidForDocUnit(unit))
 		return 0;
 	//                 PT,         MM,   IN,    P,        CM,               C     °,    %
 	double iter[] = {10.0, 720.0/25.4, 18.0, 12.0, 72.0/25.4, 72.0/25.4*4.512, 10.0, 10.0};
-	return iter[index];
+	return iter[unit];
 }
 
 /*!
  * \brief Get iteration value 2 for vruler, hruler, tabruler
  *
- * \param index unit index, see #ScUnit for valid unit index
+ * \param unit see #ScUnit for valid unit
  * \return iteration value
  *
  * \todo Documents use cases
  */
-double unitRulerGetIter2FromIndex(const int index)
+double unitRulerGetIter2FromIndex(const int unit)
 {
-	if (!unitValidForDocUnit(index))
+	if (!unitValidForDocUnit(unit))
 		return 0;
 	//                  PT,          MM,   IN,     P,         CM,                C,     °,     %
 	double iter[] = {100.0, 7200.0/25.4, 72.0, 120.0, 720.0/25.4, 720.0/25.4*4.512, 100.0, 100.0};
-	return iter[index];
+	return iter[unit];
 }
 
 /*!
@@ -511,14 +511,14 @@ double unitRulerGetIter2FromIndex(const int index)
  * - %Degress,
  * - %Percent.
  *
- * \param index unit index, see #ScUnit for valid unit index.
+ * \param unit see #ScUnit for valid unit
  * \return true if length unit, false otherwise
  */
-bool unitValidForDocUnit(const int index)
+bool unitValidForDocUnit(const int unit)
 {
-	if (index<UNITMIN || index>UNITMAX)
+	if (unit<UNITMIN || unit>UNITMAX)
 		return false;
-	if (index==6 || index==7)
+	if (unit==6 || unit==7)
 		return false;
 	return true;
 }

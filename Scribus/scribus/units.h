@@ -52,13 +52,13 @@ enum scUnit {
 	SC_PCT         = 7  /*!< %Percent abbrev */
 };
 
-double SCRIBUS_API unitGetRatioFromIndex(const int index);
-int SCRIBUS_API unitGetBaseFromIndex(const int index);
-const QString SCRIBUS_API unitGetStrFromIndex(const int index);
-const QString SCRIBUS_API unitGetUntranslatedStrFromIndex(const int index);
-const QString SCRIBUS_API unitGetSuffixFromIndex(const int index);
-int SCRIBUS_API unitGetDecimalsFromIndex(const int index);
-int SCRIBUS_API unitGetPrecisionFromIndex(const int index);
+double SCRIBUS_API unitGetRatioFromIndex(const int unit);
+int SCRIBUS_API unitGetBaseFromIndex(const int unit);
+const QString SCRIBUS_API unitGetStrFromIndex(const int unit);
+const QString SCRIBUS_API unitGetUntranslatedStrFromIndex(const int unit);
+const QString SCRIBUS_API unitGetSuffixFromIndex(const int unit);
+int SCRIBUS_API unitGetDecimalsFromIndex(const int unit);
+int SCRIBUS_API unitGetPrecisionFromIndex(const int unit);
 double SCRIBUS_API unitValueFromString(const QString& value);
 scUnit SCRIBUS_API unitIndexFromString(const QString& value);
 const QStringList SCRIBUS_API unitGetTextUnitList();
@@ -73,14 +73,14 @@ double SCRIBUS_API pts2in(double pts);
 double SCRIBUS_API pts2p(double pts);
 double SCRIBUS_API pts2cm(double pts);
 double SCRIBUS_API pts2c(double pts);
-double SCRIBUS_API pts2value(double value, int index);
-double SCRIBUS_API value2pts(double value, int index);
+double SCRIBUS_API pts2value(double value, int unit);
+double SCRIBUS_API value2pts(double value, int unit);
 double SCRIBUS_API value2value(double value, int fromUnit, int toUnit);
-QString SCRIBUS_API value2String(double value, int index, bool round, bool suffix);
+QString SCRIBUS_API value2String(double value, int unit, bool round, bool suffix);
 //Ruler specific functions
-double SCRIBUS_API unitRulerGetIter1FromIndex(const int index);
-double SCRIBUS_API unitRulerGetIter2FromIndex(const int index);
-bool SCRIBUS_API unitValidForDocUnit(const int index);
+double SCRIBUS_API unitRulerGetIter1FromIndex(const int unit);
+double SCRIBUS_API unitRulerGetIter2FromIndex(const int unit);
+bool SCRIBUS_API unitValidForDocUnit(const int unit);
 
 #endif // UNITS_H
 
