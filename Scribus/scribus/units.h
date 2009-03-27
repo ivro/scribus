@@ -29,23 +29,27 @@ for which a new license (GPL+exception) is in place.
 #define UNITMIN 0
 #define UNITMAX 7
 
+/*!
+ * \brief Enumeration of valid unit in Scribus.
+ */
 enum scUnit {
-	SC_POINTS      = 0,
-	SC_PT          = 0,
-	SC_MILLIMETERS = 1,
-	SC_MM          = 1,
-	SC_INCHES      = 2,
-	SC_IN          = 2,
-	SC_PICAS       = 3,
-	SC_P           = 3,
-	SC_CENTIMETERS = 4,
-	SC_CM          = 4,
-	SC_CICERO      = 5,
-	SC_C           = 5,
-	SC_DEGREES     = 6,
-	SC_DEG         = 6,
-	SC_PERCENT     = 7,
-	SC_PCT         = 7
+	SC_POINTS      = 0, /*!< %Points */
+	SC_MILLIMETERS = 1, /*!< %Millimeters */
+	SC_INCHES      = 2, /*!< %Inches */
+	SC_PICAS       = 3, /*!< %Picas */
+	SC_CENTIMETERS = 4, /*!< %Centimeters */
+	SC_CICERO      = 5, /*!< %Cicero */
+	SC_DEGREES     = 6, /*!< %Degrees */
+	SC_PERCENT     = 7, /*!< %Pervent */
+
+	SC_PT          = 0, /*!< %Points abbrev */
+	SC_MM          = 1, /*!< %Millimeters abbrev */
+	SC_IN          = 2, /*!< %Inches abbrev */
+	SC_P           = 3, /*!< %Picas abbrev */
+	SC_CM          = 4, /*!< %Centimeters abbrev */
+	SC_C           = 5, /*!< %Cicero abbrev */
+	SC_DEG         = 6, /*!< %Degrees abbrev */
+	SC_PCT         = 7  /*!< %Percent abbrev */
 };
 
 double SCRIBUS_API unitGetRatioFromIndex(const int index);
@@ -69,10 +73,10 @@ double SCRIBUS_API pts2in(double pts);
 double SCRIBUS_API pts2p(double pts);
 double SCRIBUS_API pts2cm(double pts);
 double SCRIBUS_API pts2c(double pts);
-double SCRIBUS_API pts2value(double Val, int unit);
-double SCRIBUS_API value2pts(double unitValue, int unit);
-double SCRIBUS_API value2value(double unitValue, int primaryUnit, int secondaryUnit);
-QString SCRIBUS_API value2String(double unitValue, int unitIndex, bool round2Precision, bool appendSuffix);
+double SCRIBUS_API pts2value(double value, int index);
+double SCRIBUS_API value2pts(double value, int index);
+double SCRIBUS_API value2value(double value, int fromUnit, int toUnit);
+QString SCRIBUS_API value2String(double value, int index, bool round, bool suffix);
 //Ruler specific functions
 double SCRIBUS_API unitRulerGetIter1FromIndex(const int index);
 double SCRIBUS_API unitRulerGetIter2FromIndex(const int index);

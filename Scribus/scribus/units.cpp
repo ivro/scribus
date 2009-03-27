@@ -24,7 +24,12 @@ for which a new license (GPL+exception) is in place.
 #include "units.h"
 
 /*!
- * @brief Returns the ratio to points for the selected unit of measure. Ratios are for: PT, MM, IN, P, CM, C. DEG and PCT return 1.0 as they will never convert
+ * \brief Get ratio from unit to points.
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return 0 if for unvalid unit index,
+ *         1 if for %Points, %Degrees and %Percent unit,
+ *         ratio for other unit
  */
 double unitGetRatioFromIndex(const int index)
 {
@@ -39,6 +44,12 @@ double unitGetRatioFromIndex(const int index)
 	return ratio[index];
 }
 
+/*!
+ * \brief Get unit base.
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return unit base
+ */
 int SCRIBUS_API unitGetBaseFromIndex(const int index)
 {
 	if (index==SC_P)
@@ -89,7 +100,10 @@ double unitValueFromString(const QString& value)
 }
 
 /*!
- * @brief Strip the text from a value and return the Unit index for the value
+ * \brief Get unit index from string.
+ *
+ * \param value string to consider
+ * \return unit index, see #ScUnit for valid unit index
  */
 scUnit unitIndexFromString(const QString& value)
 {
@@ -133,7 +147,12 @@ scUnit unitIndexFromString(const QString& value)
 }
 
 /*!
- * @brief Returns the suffix used in GUI widgets
+ * \brief Get GUI suffix for unit.
+ *
+ * GUI suffix have a whitespace prepended.
+ * See unitGetStrFromIndex() for general suffix.
+ * \param index unit index, see #ScUnit for valid unit index.
+ * \return a translated GUI suffix
  */
 const QString unitGetSuffixFromIndex(const int index)
 {
@@ -145,27 +164,35 @@ const QString unitGetSuffixFromIndex(const int index)
 }
 
 /*!
- * @brief Returns a general suffix for each of the units
+ * \brief Get general suffix for unit.
+ *
+ * See unitGetSuffixFromIndex() for GUI suffix.
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return a translated general suffix
  */
 const QString unitGetStrFromIndex(const int index)
 {
 	if (index<UNITMIN || index>UNITMAX) 
 		return "";
 	QString suffix[] = {
-						QObject::tr("pt"), 
-						QObject::tr("mm"), 
-						QObject::tr("in"), 
-						QObject::tr("p"), 
-						QObject::tr("cm"), 
-						QObject::tr("c"),
-						QObject::tr("\xB0", "degrees, unicode 0xB0"), //degree
-						QObject::tr("%")
-						};
+		QObject::tr("pt"),
+		QObject::tr("mm"),
+		QObject::tr("in"),
+		QObject::tr("p"),
+		QObject::tr("cm"),
+		QObject::tr("c"),
+		QObject::tr("\xB0", "degrees, unicode 0xB0"), //degree
+		QObject::tr("%")
+	};
 	return suffix[index];
 }
 
 /*!
- * @brief Returns a general untranslated suffix for each of the units
+ * \brief Get unstanslated general suffix for unit
+ *
+ * See unitGetStrFromIndex() for translated one.
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return an unstranslated general suffix
  */
 const QString unitGetUntranslatedStrFromIndex(const int index)
 {
@@ -175,7 +202,10 @@ const QString unitGetUntranslatedStrFromIndex(const int index)
 	return suffix[index];
 }
 /*!
- * @brief Returns the decimals for the units
+ * \brief Get decimals for unit.
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return decimals
  */
 int unitGetDecimalsFromIndex(const int index)
 {
@@ -187,7 +217,10 @@ int unitGetDecimalsFromIndex(const int index)
 }
 
 /*!
- * @brief Returns the precision for the units
+ * \brief Get precision for unit.
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return number of decimal digit
  */
 int unitGetPrecisionFromIndex(const int index)
 {
@@ -199,7 +232,10 @@ int unitGetPrecisionFromIndex(const int index)
 }
 
 /*!
- * @brief Returns a QStringList of the units for use in QComboBoxes etc
+ * \brief Get a list of length units (to use in GUI)
+ *
+ * See unitValidForDocUnit() for length units.
+ * \return an QStringList of length units
  */
 const QStringList unitGetTextUnitList()
 {
@@ -217,7 +253,9 @@ const QStringList unitGetTextUnitList()
 }
 
 /*!
- * @brief Returns the maximum index of the units we have now
+ * Get the maximum unit index allowed.
+ *
+ * See #ScUnit for valid unit index.
  */
 int unitGetMaxIndex()
 {
@@ -225,7 +263,10 @@ int unitGetMaxIndex()
 }
 
 /*!
- * @brief Returns the pts value from the mm value supplied
+ * \brief Converts %Millimeters to %Points.
+ *
+ * \param mm value in %Millimeters
+ * \return value in %Points
  */
 double mm2pts(double mm)
 {
@@ -233,7 +274,10 @@ double mm2pts(double mm)
 }
 
 /*!
- * @brief Returns the pts value from the in value supplied
+ * \brief Converts %Inches to %Points.
+ *
+ * \param in value in %Inches
+ * \return value in %Points
  */
 double in2pts(double in)
 {
@@ -241,7 +285,10 @@ double in2pts(double in)
 }
 
 /*!
- * @brief Returns the pts value from the pica value supplied
+ * \brief Converts %Picas to %Points
+ *
+ * \param p value in %Picas
+ * \return value in %Points
  */
 double p2pts(double p)
 {
@@ -249,7 +296,10 @@ double p2pts(double p)
 }
 
 /*!
- * @brief Returns the pts value from the cm value supplied
+ * \brief Converts %Centimeters to %Points
+ *
+ * \param cm value in %Centimetes
+ * \return value in %Points
  */
 double cm2pts(double cm)
 {
@@ -257,7 +307,10 @@ double cm2pts(double cm)
 }
 
 /*!
- * @brief Returns the pts value from the cm value supplied
+ * \brief Converts %Cicero to %Points
+ *
+ * \param c value in %Cicero
+ * \return value in %Points
  */
 double c2pts(double c)
 {
@@ -265,7 +318,10 @@ double c2pts(double c)
 }
 
 /*!
- * @brief Returns the mm value from the pt value supplied
+ * \brief Converts %Points to %Millimeters
+ *
+ * \param pts value in %Points
+ * \return value in %Millimeters
  */
 double pts2mm(double pts)
 {
@@ -273,7 +329,10 @@ double pts2mm(double pts)
 }
 
 /*!
- * @brief Returns the in value from the pt value supplied
+ * \brief Converts %Points to %Inches.
+ *
+ * \param pts value in %Points
+ * \return value in %Inches
  */
 double pts2in(double pts)
 {
@@ -281,7 +340,10 @@ double pts2in(double pts)
 }
 
 /*!
- * @brief Returns the pica value from the pt value supplied
+ * \brief Converts %Points to %Picas.
+ *
+ * \param pts value in %Points
+ * \return value in %Picas
  */
 double pts2p(double pts)
 {
@@ -289,7 +351,10 @@ double pts2p(double pts)
 }
 
 /*!
- * @brief Returns the cm value from the pt value supplied
+ * \brief Converts %Points to %Centimeters
+ *
+ * \param pts value in %Points
+ * \return value in %Centimeters
  */
 double pts2cm(double pts)
 {
@@ -297,7 +362,10 @@ double pts2cm(double pts)
 }
 
 /*!
- * @brief Returns the c value from the pt value supplied
+ * \brief Converts %Points to %Cicero
+ *
+ * \param pts value in %Points
+ * \return value in %Cicero
  */
 double pts2c(double pts)
 {
@@ -305,76 +373,103 @@ double pts2c(double pts)
 }
 
 /*!
- * @brief Returns the value from the pt value supplied based on unit index
+ * \brief Converts %Points to specified unit
+ *
+ * \param pts value in %Points
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return value in specified unit
  */
-double pts2value(double unitValue, int unit)
+double pts2value(double pts, int index)
 {
 	double ret = 0.0;
-	switch (unit)
+	switch (index)
 	{
-		case 0:
-		case 3:
-		case 6:
-		case 7:
-			ret = unitValue; //dont multiply by 1
+		case SC_POINTS:
+		case SC_PICAS:
+		case SC_DEGREES:
+		case SC_PERCENT:
+			ret = pts; //dont multiply by 1
 			break;
 		default:
-			ret = unitValue * unitGetRatioFromIndex(unit);
+			ret = pts * unitGetRatioFromIndex(index);
 			break;
 	}
 	return ret;
 }
 
 /*!
- * @brief Returns the pt value from the value supplied based on unit index
+ * \brief Converts specified value in %Points
+ *
+ * \param value value in index unit
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return value in %Points
  */
-double value2pts(double unitValue, int unit)
+double value2pts(double value, int index)
 {
 	double ret = 0.0;
-	switch (unit)
+	switch (index)
 	{
-		case 0:
-		case 3:
-		case 6:
-		case 7:
-			ret = unitValue; // dont divide by 1
+		case SC_POINTS:
+		case SC_PICAS:
+		case SC_DEGREES:
+		case SC_PERCENT:
+			ret = value; // dont divide by 1
 			break;
-		default:
-			ret = unitValue / unitGetRatioFromIndex(unit);
+		default: // others
+			ret = value / unitGetRatioFromIndex(index);
 			break;
 	}
 	return ret;
 }
 
 /*!
- * @brief Returns the secondary unit value from the value supplied based on primary unit
+ * \brief Converts unit to unit
+ *
+ * \param value value in fromUnit unit
+ * \param fromUnit unit for value, see #ScUnit for valid unit index
+ * \param toUnit unit for returning value, see #ScUnit for valid unit
+ * \return value in toUnit unit
  */
-double value2value(double unitValue, int primaryUnit, int secondaryUnit)
+double value2value(double value, int fromUnit, int toUnit)
 {
-	if (primaryUnit==secondaryUnit)
-		return unitValue;
+	if (fromUnit==toUnit)
+		return value;
 		
 	double pts = 0.0, ret = 0.0;
 	//Can make this not convert to points at a later stage, for now, the function exists and works.
-	pts= primaryUnit==0 ? unitValue : unitValue / unitGetRatioFromIndex(primaryUnit);
-	ret= secondaryUnit==0 ? pts : pts * unitGetRatioFromIndex(secondaryUnit);
+	pts= fromUnit==0 ? value : value / unitGetRatioFromIndex(fromUnit);
+	ret= toUnit==0 ? pts : pts * unitGetRatioFromIndex(toUnit);
 	return ret;
 }
 
-QString value2String(double unitValue, int unitIndex, bool round2Precision, bool appendSuffix)
+/*!
+ * \brief Get a string of value converted in unit.
+ *
+ * \param pts value in %Points
+ * \param index unit index, see #ScUnit for valid unit index
+ * \param round has I have to round the converted value to unit precision, see unitGetPrecisionFromIndex() ?
+ * \param suffix has I have to append suffix ?
+ */
+QString value2String(double pts, int index, bool round, bool suffix)
 {
+//ivro: Is toString not better as number see Qt documentation ?
 	QString s;
-	if (round2Precision)
-		s=QString::number(pts2value(unitValue, unitIndex), 'f', unitGetPrecisionFromIndex(unitIndex));
+	if (round)
+		s=QString::number(pts2value(pts, index), 'f', unitGetPrecisionFromIndex(index));
 	else
-		s=QString::number(pts2value(unitValue, unitIndex));
-	if (appendSuffix)
-		s += unitGetStrFromIndex(unitIndex);
+		s=QString::number(pts2value(pts, index));
+	if (suffix)
+		s += unitGetStrFromIndex(index);
 	return s;
 }
 
 /*!
- * @brief Sets up iteration value 1 for vruler, hruler and tabruler
+ * \brief Get iteration value 1 for vruler, hruler and tabruler.
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return iteration value
+ *
+ * \todo Documents use cases
  */
 double unitRulerGetIter1FromIndex(const int index)
 {
@@ -386,7 +481,12 @@ double unitRulerGetIter1FromIndex(const int index)
 }
 
 /*!
- * @brief Sets up iteration value 2 for vruler, hruler and tabruler
+ * \brief Get iteration value 2 for vruler, hruler, tabruler
+ *
+ * \param index unit index, see #ScUnit for valid unit index
+ * \return iteration value
+ *
+ * \todo Documents use cases
  */
 double unitRulerGetIter2FromIndex(const int index)
 {
@@ -397,6 +497,23 @@ double unitRulerGetIter2FromIndex(const int index)
 	return iter[index];
 }
 
+/*!
+ * \brief Is unit can be used as length unit ?
+ *
+ * Valid length unit are
+ * - %Points,
+ * - %Millimeters,
+ * - %Inches,
+ * - %Picas,
+ * - %Centimeters,
+ * - %Cicero.
+ * Invalid unit are
+ * - %Degress,
+ * - %Percent.
+ *
+ * \param index unit index, see #ScUnit for valid unit index.
+ * \return true if length unit, false otherwise
+ */
 bool unitValidForDocUnit(const int index)
 {
 	if (index<UNITMIN || index>UNITMAX)
